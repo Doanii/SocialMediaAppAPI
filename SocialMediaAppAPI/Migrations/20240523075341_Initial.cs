@@ -138,7 +138,7 @@ namespace SocialMediaAppAPI.Migrations
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict); // Change here
                 });
 
             migrationBuilder.CreateTable(
@@ -163,7 +163,7 @@ namespace SocialMediaAppAPI.Migrations
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict); // Change here
                 });
 
             migrationBuilder.CreateIndex(
