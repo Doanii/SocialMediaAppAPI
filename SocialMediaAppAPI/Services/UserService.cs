@@ -1,10 +1,18 @@
-﻿using SocialMediaAppAPI.Models;
+﻿using SocialMediaAppAPI.Data;
+using SocialMediaAppAPI.Models;
 using SocialMediaAppAPI.Types.Interfaces;
 
 namespace SocialMediaAppAPI.Services
 {
     public class UserService : IGenericService<User>, IUserService
     {
+        private readonly APIDbContext context;
+
+        public UserService(APIDbContext _context)
+        {
+            this.context = _context;
+        }
+
         public void Add(User item)
         {
             throw new NotImplementedException();
