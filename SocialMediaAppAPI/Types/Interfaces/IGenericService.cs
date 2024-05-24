@@ -1,4 +1,4 @@
-﻿namespace SocialMediaAppAPI.Interfaces
+﻿namespace SocialMediaAppAPI.Types.Interfaces
 {
     public interface IGenericService<T> where T : class
     {

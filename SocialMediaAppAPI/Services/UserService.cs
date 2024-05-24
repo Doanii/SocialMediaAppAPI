@@ -1,5 +1,5 @@
-﻿using SocialMediaAppAPI.Interfaces;
-using SocialMediaAppAPI.Models;
+﻿using SocialMediaAppAPI.Models;
+using SocialMediaAppAPI.Types.Interfaces;
 
 namespace SocialMediaAppAPI.Services
 {
