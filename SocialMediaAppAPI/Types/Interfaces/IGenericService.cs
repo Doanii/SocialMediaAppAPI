@@ -4,7 +4,7 @@
     {
         IQueryable<T>? GetAllItems();
 
-        T? GetItemById(int id);
+        T? GetItemById(Guid id);
 
         void Add(T item);
 
