@@ -20,7 +20,7 @@ namespace SocialMediaAppAPI.Services
             throw new NotImplementedException();
         }
 
-        public User? GetItemById(int id)
+        public User? GetItemById(Guid id)
         {
             throw new NotImplementedException();
         }
