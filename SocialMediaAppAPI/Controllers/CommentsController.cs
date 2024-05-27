@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SocialMediaAppAPI.Data;
 using SocialMediaAppAPI.Models;
+using SocialMediaAppAPI.Types.Requests;
 
 namespace SocialMediaAppAPI.Controllers
 {
@@ -23,9 +24,16 @@ namespace SocialMediaAppAPI.Controllers
 
         // GET: api/Comments
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Comments>>> GetComments()
+        public async Task<ActionResult<IEnumerable<CommentDTO>>> GetComments()
         {
-            return await _context.Comments.ToListAsync();
+            return await _context.Comments.Select(comment => new CommentDTO
+            {
+                UserId = comment.UserId,
+                PostId = comment.PostId,
+                Content = comment.Content,
+                CommentedAt = comment.CommentedAt,
+            })
+            .ToListAsync();
         }
 
         // GET: api/Comments/5
@@ -76,27 +84,22 @@ namespace SocialMediaAppAPI.Controllers
         // POST: api/Comments
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Comments>> PostComments(Comments comments)
+        public async Task<ActionResult<CommentDTO>> PostComments(CommentDTO comment)
         {
-            _context.Comments.Add(comments);
-            try
+            var createdComment = new Comments
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (CommentsExists(comments.UserId))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+                UserId = comment.UserId,
+                PostId = Guid.NewGuid(),
+                Content = comment.Content,
+                CommentedAt = DateTime.Now
+            };
 
-            return CreatedAtAction("GetComments", new { id = comments.UserId }, comments);
-        }
+            _context.Comments.Add(createdComment);
+            await _context.SaveChangesAsync();
+
+
+            return CreatedAtAction("GetUser", createdComment);
+       }
 
         // DELETE: api/Comments/5
         [HttpDelete("{id}")]

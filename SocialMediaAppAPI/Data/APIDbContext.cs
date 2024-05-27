@@ -51,7 +51,7 @@ namespace SocialMediaAppAPI.Data
                 .HasForeignKey(l => l.PostId);
 
             modelBuilder.Entity<Comments>()
-                .HasKey(c => new { c.UserId, c.PostId });
+                .HasKey(c => new { c.UserId, c.PostId, c.CommentId });
 
             modelBuilder.Entity<Comments>()
                 .HasOne(c => c.User)
