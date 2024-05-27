@@ -12,7 +12,7 @@ using SocialMediaAppAPI.Data;
 namespace SocialMediaAppAPI.Migrations
 {
     [DbContext(typeof(APIDbContext))]
-    [Migration("20240523075341_Initial")]
+    [Migration("20240527115853_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -83,6 +83,9 @@ namespace SocialMediaAppAPI.Migrations
                     b.Property<Guid>("PostId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("CommentId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("CommentedAt")
                         .HasColumnType("datetime2");
 
@@ -90,7 +93,7 @@ namespace SocialMediaAppAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("UserId", "PostId");
+                    b.HasKey("UserId", "PostId", "CommentId");
 
                     b.HasIndex("PostId");
 

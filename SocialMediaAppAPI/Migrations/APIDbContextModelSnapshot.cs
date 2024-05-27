@@ -80,6 +80,9 @@ namespace SocialMediaAppAPI.Migrations
                     b.Property<Guid>("PostId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("CommentId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("CommentedAt")
                         .HasColumnType("datetime2");
 
@@ -87,7 +90,7 @@ namespace SocialMediaAppAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("UserId", "PostId");
+                    b.HasKey("UserId", "PostId", "CommentId");
 
                     b.HasIndex("PostId");
 

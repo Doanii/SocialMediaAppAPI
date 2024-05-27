@@ -119,6 +119,7 @@ namespace SocialMediaAppAPI.Migrations
                 name: "Comments",
                 columns: table => new
                 {
+                    CommentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PostId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -126,7 +127,7 @@ namespace SocialMediaAppAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Comments", x => new { x.UserId, x.PostId });
+                    table.PrimaryKey("PK_Comments", x => new { x.UserId, x.PostId, x.CommentId });
                     table.ForeignKey(
                         name: "FK_Comments_Posts_PostId",
                         column: x => x.PostId,
