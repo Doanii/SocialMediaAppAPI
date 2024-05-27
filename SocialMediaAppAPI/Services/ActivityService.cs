@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace SocialMediaAppAPI.Services
 {
-    public class ActivityService
+    public interface IActivityService
+    {
+        Task<Activity> CreateActivity(User user, ActivityEnum type, string content);
+    }
+
+    public class ActivityService : IActivityService
     {
         private readonly APIDbContext _dbContext;
 
@@ -15,21 +20,20 @@ namespace SocialMediaAppAPI.Services
             _dbContext = dbContext;
         }
 
-        public async Task<string> CreateActivity(User user, ActivityEnum type, string content)
+        public async Task<Activity> CreateActivity(User user, ActivityEnum type, string content)
         {
-            Activity activity = new Activity
+            Activity activity = new()
             {
                 Id = Guid.NewGuid(),
                 Content = content,
                 Type = type,
-                User = user,
                 UserId = user.Id
             };
 
             _dbContext.Activities.Add(activity);
             await _dbContext.SaveChangesAsync();
 
-            return "Activity Generated!";
+            return activity;
         }
     }
 }
