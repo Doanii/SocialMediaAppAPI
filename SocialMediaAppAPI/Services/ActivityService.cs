@@ -1,16 +1,12 @@
 ﻿using SocialMediaAppAPI.Data;
 using SocialMediaAppAPI.Models;
 using SocialMediaAppAPI.Types.Enum;
+using SocialMediaAppAPI.Types.Interfaces;
 using System;
 using System.Threading.Tasks;
 
 namespace SocialMediaAppAPI.Services
 {
-    public interface IActivityService
-    {
-        Task<Activity> CreateActivity(User user, ActivityEnum type, string content);
-    }
-
     public class ActivityService : IActivityService
     {
         private readonly APIDbContext _dbContext;
