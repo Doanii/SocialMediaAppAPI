@@ -12,7 +12,11 @@ namespace SocialMediaAppAPI
 
             // Add services to the container.
             builder.Services.AddControllers();
-            builder.Services.AddDbContext<APIDbContext>(options => options.UseSqlServer("Server=.;Database=ViralVaultDB;Trusted_Connection=True;MultipleActiveResultSets=true;Encrypt=false;"));
+
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            builder.Services.AddDbContext<APIDbContext>(options =>
+                options.UseSqlServer(connectionString));
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
