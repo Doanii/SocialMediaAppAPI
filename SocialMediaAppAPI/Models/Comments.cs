@@ -1,7 +1,10 @@
-﻿namespace SocialMediaAppAPI.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace SocialMediaAppAPI.Models
 {
     public class Comments
     {
+        [Key]
         public Guid CommentId { get; set; }
         public Guid UserId { get; set; }
         public User User { get; set; }

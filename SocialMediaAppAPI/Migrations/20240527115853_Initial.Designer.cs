@@ -12,8 +12,8 @@ using SocialMediaAppAPI.Data;
 namespace SocialMediaAppAPI.Migrations
 {
     [DbContext(typeof(APIDbContext))]
-    [Migration("20240527114634_initial")]
-    partial class initial
+    [Migration("20240527115853_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -93,7 +93,7 @@ namespace SocialMediaAppAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("UserId", "PostId");
+                    b.HasKey("UserId", "PostId", "CommentId");
 
                     b.HasIndex("PostId");
 
