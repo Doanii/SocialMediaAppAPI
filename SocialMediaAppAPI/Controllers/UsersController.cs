@@ -63,9 +63,38 @@ namespace SocialMediaAppAPI.Controllers
             return userDto;
         }
 
-        // POST: api/Users
-        [HttpPost]
-        public async Task<ActionResult<UserDTO>> PostUser(CreateUserDTO createUserDto)
+        // POST: api/Register
+        [HttpPost("/api/Register")]
+        public async Task<ActionResult<UserDTO>> PostRegister(CreateUserDTO createUserDto)
+        {
+            var user = new User
+            {
+                Id = Guid.NewGuid(),
+                Name = createUserDto.Name,
+                Email = createUserDto.Email,
+                Password = PasswordHasher.HashPassword(createUserDto.Password),
+                UserName = createUserDto.UserName,
+                FollowCount = 0
+            };
+
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            var userDto = new UserDTO
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Email = user.Email,
+                UserName = user.UserName,
+                FollowCount = user.FollowCount
+            };
+
+            return CreatedAtAction("GetUser", new { id = user.Id }, userDto);
+        }
+
+        // POST: api/Login
+        [HttpPost("/api/Login")]
+        public async Task<ActionResult<UserDTO>> PostLogin(CreateUserDTO createUserDto)
         {
             var user = new User
             {
