@@ -12,7 +12,7 @@ using SocialMediaAppAPI.Data;
 namespace SocialMediaAppAPI.Migrations
 {
     [DbContext(typeof(APIDbContext))]
-    [Migration("20240527115853_Initial")]
+    [Migration("20240527130226_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -24,6 +24,31 @@ namespace SocialMediaAppAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Comments", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PostId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CommentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CommentedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "PostId", "CommentId");
+
+                    b.HasIndex("PostId");
+
+                    b.ToTable("Comments");
+                });
 
             modelBuilder.Entity("SocialMediaAppAPI.Models.Activity", b =>
                 {
@@ -73,31 +98,6 @@ namespace SocialMediaAppAPI.Migrations
                     b.HasIndex("PostId");
 
                     b.ToTable("Attachments");
-                });
-
-            modelBuilder.Entity("SocialMediaAppAPI.Models.Comments", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("PostId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CommentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CommentedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserId", "PostId", "CommentId");
-
-                    b.HasIndex("PostId");
-
-                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("SocialMediaAppAPI.Models.Followers", b =>
@@ -195,6 +195,25 @@ namespace SocialMediaAppAPI.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Comments", b =>
+                {
+                    b.HasOne("SocialMediaAppAPI.Models.Post", "Post")
+                        .WithMany("Comments")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SocialMediaAppAPI.Models.User", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Post");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("SocialMediaAppAPI.Models.Activity", b =>
                 {
                     b.HasOne("SocialMediaAppAPI.Models.User", "User")
@@ -215,25 +234,6 @@ namespace SocialMediaAppAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Post");
-                });
-
-            modelBuilder.Entity("SocialMediaAppAPI.Models.Comments", b =>
-                {
-                    b.HasOne("SocialMediaAppAPI.Models.Post", "Post")
-                        .WithMany("Comments")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SocialMediaAppAPI.Models.User", "User")
-                        .WithMany("Comments")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Post");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("SocialMediaAppAPI.Models.Followers", b =>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -22,10 +23,34 @@ namespace SocialMediaAppAPI.Controllers
             _context = context;
         }
 
-        // GET: api/Comments
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<CommentDTO>>> GetComments()
+        // GET: api/Comments/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Comments>> GetComments(Guid id)
         {
+            var comment = await _context.Comments
+                                        .Where(c => c.CommentId == id)
+                                        .FirstOrDefaultAsync();
+
+            if (comment == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(comment);
+        }
+
+        // GET: api/Comments/5
+        [HttpGet("{page}/{amount}")]
+        public async Task<ActionResult<IEnumerable<CommentDTO>>> GetComments(int page, int amount)
+        {
+            if (page == 0)
+                page = 1;
+
+            if (amount == 0)
+                amount = int.MaxValue;
+
+            var skip = (page - 1) * amount;
+
             return await _context.Comments.Select(comment => new CommentDTO
             {
                 UserId = comment.UserId,
@@ -33,34 +58,27 @@ namespace SocialMediaAppAPI.Controllers
                 Content = comment.Content,
                 CommentedAt = comment.CommentedAt,
             })
+            .Skip(skip)
+            .Take(amount)
             .ToListAsync();
-        }
-
-        // GET: api/Comments/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Comments>> GetComments(Guid id)
-        {
-            var comments = await _context.Comments.FindAsync(id);
-
-            if (comments == null)
-            {
-                return NotFound();
-            }
-
-            return comments;
         }
 
         // PUT: api/Comments/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutComments(Guid id, Comments comments)
+        public async Task<IActionResult> PutComments(Guid id, EditCommentDTO updatedComment)
         {
-            if (id != comments.UserId)
+            var existingComment = await _context.Comments
+                                        .Where(c => c.CommentId == id)
+                                        .FirstOrDefaultAsync();
+
+            if (existingComment == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            _context.Entry(comments).State = EntityState.Modified;
+            // Only allow updating the content of the comment, not the UserId
+            existingComment.Content = updatedComment.Content;
 
             try
             {
@@ -81,15 +99,17 @@ namespace SocialMediaAppAPI.Controllers
             return NoContent();
         }
 
+
         // POST: api/Comments
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<CommentDTO>> PostComments(CommentDTO comment)
+        public async Task<ActionResult<Comments>> PostComments(CreateCommentDTO comment)
         {
             var createdComment = new Comments
             {
+                CommentId = Guid.NewGuid(),
                 UserId = comment.UserId,
-                PostId = Guid.NewGuid(),
+                PostId = comment.PostId,
                 Content = comment.Content,
                 CommentedAt = DateTime.Now
             };
@@ -97,15 +117,17 @@ namespace SocialMediaAppAPI.Controllers
             _context.Comments.Add(createdComment);
             await _context.SaveChangesAsync();
 
-
-            return CreatedAtAction("GetUser", createdComment);
-       }
+            // Assuming you have an action called "GetComment" that takes commentId as a parameter
+            return CreatedAtAction(nameof(GetComments), new { id = createdComment.CommentId }, createdComment);
+        }
 
         // DELETE: api/Comments/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteComments(Guid id)
         {
-            var comments = await _context.Comments.FindAsync(id);
+            var comments = await _context.Comments
+                                        .Where(c => c.CommentId == id)
+                                        .FirstOrDefaultAsync();
             if (comments == null)
             {
                 return NotFound();
