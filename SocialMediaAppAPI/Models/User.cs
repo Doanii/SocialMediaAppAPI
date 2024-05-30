@@ -7,11 +7,22 @@ namespace SocialMediaAppAPI.Models
     {
         [Key]
         public Guid Id { get; set; }
+
+        [Required]
         public string Name { get; set; }
+
+        [Required]
         public string Email { get; set; }
+
+        [Required]
         public string Password { get; set; }
+
+        [Required]
         public string UserName { get; set; } = string.Empty;
         public int FollowCount { get; set; } = 0;
+
+        [Required]
+        public string ApiToken { get; set; }
 
         public ICollection<Followers>? Followers { get; set; }
         public ICollection<Followers>? Following { get; set; }
