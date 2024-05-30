@@ -12,7 +12,7 @@ using SocialMediaAppAPI.Data;
 namespace SocialMediaAppAPI.Migrations
 {
     [DbContext(typeof(APIDbContext))]
-    [Migration("20240527130226_Initial")]
+    [Migration("20240529123917_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -171,9 +171,13 @@ namespace SocialMediaAppAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Email")
+                    b.Property<string>("ApiToken")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("FollowCount")
                         .HasColumnType("int");
@@ -188,9 +192,15 @@ namespace SocialMediaAppAPI.Migrations
 
                     b.Property<string>("UserName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("UserName")
+                        .IsUnique();
 
                     b.ToTable("Users");
                 });
@@ -200,13 +210,13 @@ namespace SocialMediaAppAPI.Migrations
                     b.HasOne("SocialMediaAppAPI.Models.Post", "Post")
                         .WithMany("Comments")
                         .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("SocialMediaAppAPI.Models.User", "User")
                         .WithMany("Comments")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Post");
@@ -260,13 +270,13 @@ namespace SocialMediaAppAPI.Migrations
                     b.HasOne("SocialMediaAppAPI.Models.Post", "Post")
                         .WithMany("Likes")
                         .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("SocialMediaAppAPI.Models.User", "User")
                         .WithMany("Likes")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Post");

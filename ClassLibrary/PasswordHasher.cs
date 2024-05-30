@@ -21,5 +21,11 @@ namespace ClassLibrary
                 return builder.ToString();
             }
         }
+
+        public static bool VerifyPassword(string inputPassword, string hashedPassword)
+        {
+            var hashedInput = HashPassword(inputPassword);
+            return hashedInput == hashedPassword;
+        }
     }
 }
