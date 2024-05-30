@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SocialMediaAppAPI.Data;
 using SocialMediaAppAPI.Models;
+using SocialMediaAppAPI.Types.Attributes;
 using SocialMediaAppAPI.Types.Requests.Users;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,7 @@ namespace SocialMediaAppAPI.Controllers
 
         // GET: api/Users
         [HttpGet]
+        [ValidateApiToken]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers()
         {
             //_context.DropAllTables();
@@ -44,6 +46,7 @@ namespace SocialMediaAppAPI.Controllers
 
         // GET: api/Users/5
         [HttpGet("{id}")]
+        [ValidateApiToken]
         public async Task<ActionResult<UserDTO>> GetUser(Guid id)
         {
             var user = await _context.Users.FindAsync(id);
