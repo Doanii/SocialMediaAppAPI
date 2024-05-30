@@ -26,8 +26,11 @@ namespace SocialMediaAppAPI.Types.Middlewares
                 var actionDescriptor = endpoint.Metadata.GetMetadata<ControllerActionDescriptor>();
                 if (actionDescriptor != null)
                 {
+                    var controllerType = actionDescriptor.ControllerTypeInfo;
                     var methodInfo = actionDescriptor.MethodInfo;
-                    var hasAttribute = methodInfo.GetCustomAttribute<ValidateApiTokenAttribute>() != null;
+
+                    var hasAttribute = controllerType.GetCustomAttribute<ValidateApiTokenAttribute>() != null ||
+                                       methodInfo.GetCustomAttribute<ValidateApiTokenAttribute>() != null;
 
                     if (hasAttribute)
                     {

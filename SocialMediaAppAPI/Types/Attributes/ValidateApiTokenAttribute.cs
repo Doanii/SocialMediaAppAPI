@@ -2,7 +2,7 @@
 
 namespace SocialMediaAppAPI.Types.Attributes
 {
-    [AttributeUsage(AttributeTargets.Method)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class ValidateApiTokenAttribute : Attribute
     {
     }

@@ -7,11 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SocialMediaAppAPI.Data;
 using SocialMediaAppAPI.Models;
+using SocialMediaAppAPI.Types.Attributes;
 
 namespace SocialMediaAppAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ValidateApiToken]
     public class FollowersController : ControllerBase
     {
         private readonly APIDbContext _context;
