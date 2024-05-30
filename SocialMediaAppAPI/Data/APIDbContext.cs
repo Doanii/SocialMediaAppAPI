@@ -17,6 +17,14 @@ namespace SocialMediaAppAPI.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
+
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.UserName)
+                .IsUnique();
+
             modelBuilder.Entity<Followers>()
                 .HasKey(f => new { f.UserId, f.FollowedUserId });
 
@@ -43,12 +51,14 @@ namespace SocialMediaAppAPI.Data
             modelBuilder.Entity<Likes>()
                 .HasOne(l => l.User)
                 .WithMany(u => u.Likes)
-                .HasForeignKey(l => l.UserId);
+                .HasForeignKey(l => l.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Likes>()
                 .HasOne(l => l.Post)
                 .WithMany(p => p.Likes)
-                .HasForeignKey(l => l.PostId);
+                .HasForeignKey(l => l.PostId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Comments>()
                 .HasKey(c => new { c.UserId, c.PostId, c.CommentId });
@@ -56,12 +66,14 @@ namespace SocialMediaAppAPI.Data
             modelBuilder.Entity<Comments>()
                 .HasOne(c => c.User)
                 .WithMany(u => u.Comments)
-                .HasForeignKey(c => c.UserId);
+                .HasForeignKey(c => c.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Comments>()
                 .HasOne(c => c.Post)
                 .WithMany(p => p.Comments)
-                .HasForeignKey(c => c.PostId);
+                .HasForeignKey(c => c.PostId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Attachments>()
                 .HasOne(a => a.Post)
@@ -72,6 +84,34 @@ namespace SocialMediaAppAPI.Data
                 .HasOne(a => a.User)
                 .WithMany()
                 .HasForeignKey(a => a.UserId);
+        }
+
+        public void DropAllTables()
+        {
+                var dropForeignKeysSql = @"
+            DECLARE @sql NVARCHAR(MAX) = N'';
+            SELECT @sql += 'ALTER TABLE ' + QUOTENAME(TABLE_SCHEMA) + '.' + QUOTENAME(TABLE_NAME) 
+                        + ' DROP CONSTRAINT ' + QUOTENAME(CONSTRAINT_NAME) + ';'
+            FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
+            WHERE CONSTRAINT_TYPE = 'FOREIGN KEY';
+
+            EXEC sp_executesql @sql;
+        ";
+
+                var dropTablesSql = @"
+            DECLARE @sql NVARCHAR(MAX) = N'';
+            SELECT @sql += 'DROP TABLE ' + QUOTENAME(TABLE_SCHEMA) + '.' + QUOTENAME(TABLE_NAME) + ';'
+            FROM INFORMATION_SCHEMA.TABLES
+            WHERE TABLE_TYPE = 'BASE TABLE';
+
+            EXEC sp_executesql @sql;
+        ";
+
+                // Drop foreign keys first
+                this.Database.ExecuteSqlRaw(dropForeignKeysSql);
+
+                // Then drop tables
+                this.Database.ExecuteSqlRaw(dropTablesSql);
         }
     }
 }

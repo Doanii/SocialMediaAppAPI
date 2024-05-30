@@ -86,14 +86,7 @@ namespace SocialMediaAppAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CommentsExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
             return NoContent();

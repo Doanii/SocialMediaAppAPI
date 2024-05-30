@@ -1,4 +1,4 @@
-﻿namespace SocialMediaAppAPI.Types.Requests
+﻿namespace SocialMediaAppAPI.Types.Requests.Users
 {
     public class UserDTO
     {
