@@ -1,0 +1,8 @@
+@model NavLink
+
+<li id="nav-link-@Model.Name" class="text-amber-200"><a href=@Model.Url>@Model.Name</a></li>
+
+<script>
+    const el = document.getElementById("nav-link-@Model.Name");
+    console.log(el);
+</script>

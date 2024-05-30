@@ -1,3 +1,6 @@
+using Dashboard.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace Dashboard
 {
     public class Program
@@ -8,6 +11,10 @@ namespace Dashboard
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            builder.Services.AddDbContext<DashboardDbContext>(options =>
+                options.UseSqlServer(connectionString));
 
             var app = builder.Build();
 
