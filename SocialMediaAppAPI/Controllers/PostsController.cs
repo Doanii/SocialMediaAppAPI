@@ -176,8 +176,6 @@ namespace SocialMediaAppAPI.Controllers
             var skip = (page - 1) * amount;
 
             var posts = await _context.Posts
-                .Skip(skip)
-                .Take(amount)
                 .Select(post => new PostDTO
                 {
                     Id = post.Id,
@@ -191,6 +189,8 @@ namespace SocialMediaAppAPI.Controllers
                     Attachments = post.Attachments
                 })
                 .OrderByDescending(p => p.CreatedAt)
+                .Skip(skip)
+                .Take(amount)
                 .ToListAsync();
 
             return Ok(posts);
