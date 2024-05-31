@@ -24,11 +24,23 @@ namespace SocialMediaAppAPI.Controllers
 
         // GET: api/Posts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<Post>>> GetPost(Guid id)
+        public async Task<ActionResult<PostDTO>> GetPost(Guid id)
         {
             var post = await _context.Posts
-                                        .Where(c => c.Id == id)
-                                        .FirstOrDefaultAsync();
+                .Where(c => c.Id == id)
+                .Select(post => new PostDTO
+                {
+                    Id = post.Id,
+                    Content = post.Content,
+                    OPUsername = _context.Users.Where(u => u.Id == post.UserId).Select(u => u.UserName).FirstOrDefault(),
+                    Following = _context.Followers.Any(f => f.UserId == post.UserId && f.FollowedUserId == post.UserId),
+                    LikeCount = post.LikeCount,
+                    CommentCount = post.CommentCount,
+                    CreatedAt = post.CreatedAt,
+                    UserId = post.UserId,
+                    Attachments = post.Attachments
+                })
+                .FirstOrDefaultAsync();
 
             if (post == null)
             {
@@ -50,47 +62,33 @@ namespace SocialMediaAppAPI.Controllers
 
             var skip = (page - 1) * amount;
 
-            // Get the list of users the current user is following
             var followedUserIds = await _context.Followers
-                       .Where(f => f.UserId == userId)
-                       .Select(f => f.FollowedUserId)
-                       .ToListAsync();
+                .Where(f => f.UserId == userId)
+                .Select(f => f.FollowedUserId)
+                .ToListAsync();
 
-
-
-
-            // Get posts from followed users
             var followedPosts = _context.Posts
-                                         .Where(p => followedUserIds.Contains(p.UserId))
-                                         .OrderByDescending(p => p.CreatedAt);
+                .Where(p => followedUserIds.Contains(p.UserId))
+                .OrderByDescending(p => p.CreatedAt);
 
-            // Get posts from non-followed users
-            //var randomPosts = _context.Posts
-            //                          .Where(p => !followedUserIds.Contains(p.UserId))
-            //                          .OrderByDescending(p => p.CreatedAt);
-
-            // Combine followed and random posts
-            //var combinedPosts = followedPosts.Concat(randomPosts);
-
-            // Apply pagination
             var paginatedPosts = await followedPosts
-                                         .Skip(skip)
-                                         .Take(amount)
-                                         .ToListAsync();
+                .Skip(skip)
+                .Take(amount)
+                .Select(post => new PostDTO
+                {
+                    Id = post.Id,
+                    Content = post.Content,
+                    OPUsername = _context.Users.Where(u => u.Id == post.UserId).Select(u => u.UserName).FirstOrDefault(),
+                    Following = followedUserIds.Contains(post.UserId),
+                    LikeCount = post.LikeCount,
+                    CommentCount = post.CommentCount,
+                    CreatedAt = post.CreatedAt,
+                    UserId = post.UserId,
+                    Attachments = post.Attachments
+                })
+                .ToListAsync();
 
-            // Map to PostDTO
-            var postDTOs = paginatedPosts.Select(post => new PostDTO
-            {
-                Id = post.Id,
-                Content = post.Content,
-                LikeCount = post.LikeCount,
-                CommentCount = post.CommentCount,
-                CreatedAt = post.CreatedAt,
-                UserId = post.UserId,
-                Attachments = post.Attachments
-            }).ToList();
-
-            return Ok(postDTOs);
+            return Ok(paginatedPosts);
         }
 
         [HttpGet("/api/Feed/NotFollowing/{userId}/{page}/{amount}")]
@@ -104,36 +102,33 @@ namespace SocialMediaAppAPI.Controllers
 
             var skip = (page - 1) * amount;
 
-            // Get the list of users the current user is following
             var followedUserIds = await _context.Followers
-                       .Where(f => f.UserId == userId)
-                       .Select(f => f.FollowedUserId)
-                       .ToListAsync();
+                .Where(f => f.UserId == userId)
+                .Select(f => f.FollowedUserId)
+                .ToListAsync();
 
-            // Get posts from non-followed users
             var notFollowedPosts = _context.Posts
-                                            .Where(p => !followedUserIds.Contains(p.UserId) && p.UserId != userId)
-                                            .OrderByDescending(p => p.CreatedAt);
+                .Where(p => !followedUserIds.Contains(p.UserId) && p.UserId != userId)
+                .OrderByDescending(p => p.CreatedAt);
 
-            // Apply pagination
             var paginatedPosts = await notFollowedPosts
-                                         .Skip(skip)
-                                         .Take(amount)
-                                         .ToListAsync();
+                .Skip(skip)
+                .Take(amount)
+                .Select(post => new PostDTO
+                {
+                    Id = post.Id,
+                    Content = post.Content,
+                    OPUsername = _context.Users.Where(u => u.Id == post.UserId).Select(u => u.UserName).FirstOrDefault(),
+                    Following = followedUserIds.Contains(post.UserId),
+                    LikeCount = post.LikeCount,
+                    CommentCount = post.CommentCount,
+                    CreatedAt = post.CreatedAt,
+                    UserId = post.UserId,
+                    Attachments = post.Attachments
+                })
+                .ToListAsync();
 
-            // Map to PostDTO
-            var postDTOs = paginatedPosts.Select(post => new PostDTO
-            {
-                Id = post.Id,
-                Content = post.Content,
-                LikeCount = post.LikeCount,
-                CommentCount = post.CommentCount,
-                CreatedAt = post.CreatedAt,
-                UserId = post.UserId,
-                Attachments = post.Attachments
-            }).ToList();
-
-            return Ok(postDTOs);
+            return Ok(paginatedPosts);
         }
 
         // GET: api/Posts/1/10
@@ -148,21 +143,25 @@ namespace SocialMediaAppAPI.Controllers
 
             var skip = (page - 1) * amount;
 
-            return await _context.Posts.Select(Post => new PostDTO
-            {
-                Id = Post.Id,
-                Content = Post.Content,
-                LikeCount = Post.LikeCount,
-                CommentCount = Post.CommentCount,
-                CreatedAt = Post.CreatedAt,
-                UserId = Post.UserId,
-                Attachments = Post.Attachments
-            })
-            .Skip(skip)
-            .Take(amount)
-            .ToListAsync();
-        }
+            var posts = await _context.Posts
+                .Skip(skip)
+                .Take(amount)
+                .Select(post => new PostDTO
+                {
+                    Id = post.Id,
+                    Content = post.Content,
+                    OPUsername = _context.Users.Where(u => u.Id == post.UserId).Select(u => u.UserName).FirstOrDefault(),
+                    Following = false,
+                    LikeCount = post.LikeCount,
+                    CommentCount = post.CommentCount,
+                    CreatedAt = post.CreatedAt,
+                    UserId = post.UserId,
+                    Attachments = post.Attachments
+                })
+                .ToListAsync();
 
+            return Ok(posts);
+        }
 
         // PUT: api/Posts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -170,15 +169,14 @@ namespace SocialMediaAppAPI.Controllers
         public async Task<IActionResult> PutPost(Guid id, UpdatePostDTO post)
         {
             var existingPost = await _context.Posts
-                                        .Where(c => c.Id == id)
-                                        .FirstOrDefaultAsync();
+                .Where(c => c.Id == id)
+                .FirstOrDefaultAsync();
 
             if (existingPost == null)
             {
                 return NotFound();
             }
 
-            // Only allow updating the content of the comment, not the UserId
             existingPost.Content = post.Content;
 
             try
@@ -211,18 +209,16 @@ namespace SocialMediaAppAPI.Controllers
             _context.Posts.Add(createdPost);
             await _context.SaveChangesAsync();
 
-            // Assuming you have an action called "GetPost" that takes id as a parameter
             return CreatedAtAction("GetPost", new { id = createdPost.Id }, createdPost);
         }
-
 
         // DELETE: api/Posts/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePost(Guid id)
         {
             var post = await _context.Posts
-                                        .Where(c => c.Id == id)
-                                        .FirstOrDefaultAsync();
+                .Where(c => c.Id == id)
+                .FirstOrDefaultAsync();
             if (post == null)
             {
                 return NotFound();
