@@ -1,5 +1,7 @@
 using Dashboard.Data;
 using Dashboard.Hubs;
+using Dashboard.MiddlewareExtentions;
+using Dashboard.Subscriptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Dashboard
@@ -14,9 +16,14 @@ namespace Dashboard
             builder.Services.AddControllersWithViews();
             builder.Services.AddSignalR();
 
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
             builder.Services.AddDbContext<DashboardDbContext>(options =>
-                options.UseSqlServer(connectionString));
+                options.UseSqlServer(connectionString), ServiceLifetime.Singleton);
+
+            builder.Services.AddSingleton<DashboardHub>();
+            builder.Services.AddSingleton<PostTableDependency>();
+            builder.Services.AddSingleton<UserTableDependency>();
 
             var app = builder.Build();
 
@@ -40,6 +47,7 @@ namespace Dashboard
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.MapHub<DashboardHub>("/DashboardHub");
+            app.UsePhotoTableDependency(connectionString);
 
             app.Run();
         }

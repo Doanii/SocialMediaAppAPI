@@ -4,6 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <OutputPath>bin\Publish\Dashboard</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,7 +22,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="SqlTableDependency" Version="8.5.8" />
   </ItemGroup>
 
 </Project>

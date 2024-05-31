@@ -12,7 +12,10 @@ const InvokeData = () => {
     connection.invoke("NewPostsToday").catch(function (err) {
         return console.error(err.toString());
     });
-}
+    connection.invoke("UserCount").catch(function (err) {
+        return console.error(err.toString());
+    });
+};
 
 const start = async () => {
     connection.start().then(function () {
@@ -21,7 +24,7 @@ const start = async () => {
     }).catch(function (err) {
         return console.error(err.toString());
     });
-}
+};
 
 connection.onclose(async () => {
     await start();
@@ -30,11 +33,13 @@ connection.onclose(async () => {
 start();
 
 connection.on("TotalPosts", (count) => {
-    const element = document.getElementById("TotalPostsCount");
-    element.innerHTML = count;
-})
+    document.getElementById("TotalPostsCount").innerHTML = count;
+});
 
 connection.on("NewPostsToday", (count) => {
-    const element = document.getElementById("NewPostsToday");
-    element.innerHTML = count;
-})
+    document.getElementById("NewPostsToday").innerHTML = count;
+});
+
+connection.on("UserCount", (count) => {
+    document.getElementById("UserCount").innerHTML = count;
+});
