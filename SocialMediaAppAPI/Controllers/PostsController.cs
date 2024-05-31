@@ -9,6 +9,7 @@ using SocialMediaAppAPI.Data;
 using SocialMediaAppAPI.Models;
 using SocialMediaAppAPI.Types.Attributes;
 using SocialMediaAppAPI.Types.Requests;
+using Dashboard.Hubs;
 
 namespace SocialMediaAppAPI.Controllers
 {
@@ -18,10 +19,12 @@ namespace SocialMediaAppAPI.Controllers
     public class PostsController : ControllerBase
     {
         private readonly APIDbContext _context;
+        private readonly DashboardHub _dashboardHub;
 
-        public PostsController(APIDbContext context)
+        public PostsController(APIDbContext context, DashboardHub dashboardHub)
         {
             _context = context;
+            _dashboardHub = dashboardHub;
         }
 
         private User GetAuthenticatedUser()
@@ -253,6 +256,8 @@ namespace SocialMediaAppAPI.Controllers
 
             _context.Posts.Add(createdPost);
             await _context.SaveChangesAsync();
+
+            await _dashboardHub.TotalPosts();
 
             return CreatedAtAction("GetPost", new { id = createdPost.Id }, createdPost);
         }

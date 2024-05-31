@@ -2,7 +2,67 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="grid grid-cols-1 gap-6 h-full lg:grid-cols-3">
+    <div class="grid grid-rows-6 gap-6 h-full lg:col-span-2">
+        <div class="bg-white/50 backdrop-blur-2xl p-6 rounded w-full h-full row-span-2 sm:row-span-3">
+            Hier komen charts
+        </div>
+        <div class="grid row-span-2 sm:row-span-1 sm:grid-cols-3 gap-6 h-full">
+            <div class="hidden sm:block"></div>
+            <div class="bg-white/50 backdrop-blur-2xl p-6 rounded w-full h-full uppercase text-sm">
+                <div class="font-black text-green-700 text-xl">133</div>
+                new posts today
+            </div>
+            <div class="bg-white/50 backdrop-blur-2xl p-6 rounded w-full h-full uppercase text-sm">
+                <div class="font-black text-green-700 text-xl" id="TotalPostsCount">0</div>
+                total posts
+            </div>
+        </div>
+        <div class="bg-white/50 backdrop-blur-2xl p-6 rounded w-full h-full row-span-2">
+            Hier komen charts
+        </div>
+    </div>
+    <div class="bg-white/50 backdrop-blur-2xl p-6 rounded w-full h-full order-first lg:order-none flex flex-col gap-6 overflow-y-scroll">
+        <div class="bg-white p-6 rounded flex gap-6">
+            @* <img src="img/profilepic.png" class="rounded-full w-16" alt="Profile"/> *@
+            <div>
+                <div>
+                    <span class="font-bold">Jeanette</span>
+                    <span class="font-thin">@@jeanette</span>
+                </div>
+                <div>
+                    Hallo, hoe werkt deze app? ik kan niet wachten om te beginnen! Waar kan ik je weer volgen?
+                </div>
+            </div>
+        </div>
+        <div class="bg-white p-6 rounded grid grid-cols-2 gap-6">
+            @* <img src="img/profilepic.png" class="rounded-full w-16" alt="Profile"/> *@
+            <div>
+                <div>
+                    <span class="font-bold">Jeanette</span>
+                    <span class="font-thin">@@jeanette</span>
+                </div>
+                <div>
+                    Hallo, hoe werkt deze app? ik kan niet wachten om te beginnen! Waar kan ik je weer volgen?
+                </div>
+            </div>
+            <img src="img/88149.jpg" class="rounded" alt="Post"/>
+        </div>
+        <div class="bg-white p-6 rounded grid grid-cols-2 gap-6">
+            @* <img src="img/profilepic.png" class="rounded-full w-16" alt="Profile"/> *@
+            <div>
+                <div>
+                    <span class="font-bold">Jeanette</span>
+                    <span class="font-thin">@@jeanette</span>
+                </div>
+                <div>
+                    Hallo, hoe werkt deze app? ik kan niet wachten om te beginnen! Waar kan ik je weer volgen?
+                </div>
+            </div>
+            <img src="img/88149.jpg" class="rounded" alt="Post"/>
+        </div>
+    </div>
 </div>
+
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/dashboard.js"></script>

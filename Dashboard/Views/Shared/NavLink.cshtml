@@ -1,0 +1,7 @@
+@model NavLink
+
+<li id="nav-link-@Model.Name"><a id="nav-link-inner-@Model.Name" href=@Model.Url>@Model.Name</a></li>
+
+<script>
+    set_nav_url("@Model.Name", "@Model.Url");
+</script>

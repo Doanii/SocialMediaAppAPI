@@ -1,3 +1,7 @@
+using Dashboard.Data;
+using Dashboard.Hubs;
+using Microsoft.EntityFrameworkCore;
+
 namespace Dashboard
 {
     public class Program
@@ -8,6 +12,11 @@ namespace Dashboard
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddSignalR();
+
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            builder.Services.AddDbContext<DashboardDbContext>(options =>
+                options.UseSqlServer(connectionString));
 
             var app = builder.Build();
 
@@ -29,6 +38,8 @@ namespace Dashboard
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            app.MapHub<DashboardHub>("/DashboardHub");
 
             app.Run();
         }
