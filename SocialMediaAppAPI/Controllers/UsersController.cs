@@ -30,6 +30,11 @@ namespace SocialMediaAppAPI.Controllers
         [ValidateApiToken]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers()
         {
+            var authenticatedUser = GetAuthenticatedUser();
+            if (authenticatedUser == null)
+            {
+                return Unauthorized();
+            }
             //_context.DropAllTables();
 
             return await _context.Users
@@ -39,7 +44,8 @@ namespace SocialMediaAppAPI.Controllers
                     Name = user.Name,
                     Email = user.Email,
                     UserName = user.UserName,
-                    FollowCount = user.FollowCount
+                    FollowCount = user.FollowCount,
+                    IsFollowing = _context.Followers.Any(f => f.UserId == authenticatedUser.Id && f.FollowedUserId == user.Id)
                 })
                 .ToListAsync();
         }
@@ -158,6 +164,11 @@ namespace SocialMediaAppAPI.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        private User? GetAuthenticatedUser()
+        {
+            return HttpContext.Items["AuthenticatedUser"] as User;
         }
 
         private bool UserExists(Guid id)

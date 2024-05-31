@@ -7,5 +7,6 @@
         public string Email { get; set; }
         public string UserName { get; set; }
         public int FollowCount { get; set; }
+        public bool IsFollowing { get; set; }
     }
 }
