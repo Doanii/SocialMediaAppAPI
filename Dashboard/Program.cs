@@ -1,6 +1,6 @@
+using Dashboard.Data;
 using Dashboard.Hubs;
 using Microsoft.EntityFrameworkCore;
-using SocialMediaAppAPI.Data;
 
 namespace Dashboard
 {
@@ -15,7 +15,7 @@ namespace Dashboard
             builder.Services.AddSignalR();
 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-            builder.Services.AddDbContext<APIDbContext>(options =>
+            builder.Services.AddDbContext<DashboardDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
             var app = builder.Build();

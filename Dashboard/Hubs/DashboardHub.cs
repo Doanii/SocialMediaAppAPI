@@ -1,12 +1,12 @@
-﻿using Dashboard.Data.Requests;
+﻿using Dashboard.Data;
+using Dashboard.Data.Requests;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using SocialMediaAppAPI.Data;
 using SocialMediaAppAPI.Models;
 
 namespace Dashboard.Hubs
 {
-    public class DashboardHub(APIDbContext dbContext) : Hub
+    public class DashboardHub(DashboardDbContext dbContext) : Hub
     {
 
         public async Task NewPostReceived()
