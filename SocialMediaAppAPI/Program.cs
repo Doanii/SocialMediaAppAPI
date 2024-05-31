@@ -1,4 +1,6 @@
 
+using Dashboard.Data;
+using Dashboard.Hubs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using SocialMediaAppAPI.Data;

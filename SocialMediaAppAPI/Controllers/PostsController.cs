@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SocialMediaAppAPI.Data;
 using SocialMediaAppAPI.Models;
@@ -19,12 +14,10 @@ namespace SocialMediaAppAPI.Controllers
     public class PostsController : ControllerBase
     {
         private readonly APIDbContext _context;
-        private readonly DashboardHub _dashboardHub;
 
-        public PostsController(APIDbContext context, DashboardHub dashboardHub)
+        public PostsController(APIDbContext context)
         {
             _context = context;
-            _dashboardHub = dashboardHub;
         }
 
         private User GetAuthenticatedUser()
@@ -256,8 +249,6 @@ namespace SocialMediaAppAPI.Controllers
 
             _context.Posts.Add(createdPost);
             await _context.SaveChangesAsync();
-
-            await _dashboardHub.TotalPosts();
 
             return CreatedAtAction("GetPost", new { id = createdPost.Id }, createdPost);
         }

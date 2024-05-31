@@ -9,6 +9,9 @@ const InvokeData = () => {
     connection.invoke("TotalPosts").catch(function (err) {
         return console.error(err.toString());
     });
+    connection.invoke("NewPostsToday").catch(function (err) {
+        return console.error(err.toString());
+    });
 }
 
 const start = async () => {
@@ -27,7 +30,11 @@ connection.onclose(async () => {
 start();
 
 connection.on("TotalPosts", (count) => {
-    console.log(count);
     const element = document.getElementById("TotalPostsCount");
+    element.innerHTML = count;
+})
+
+connection.on("NewPostsToday", (count) => {
+    const element = document.getElementById("NewPostsToday");
     element.innerHTML = count;
 })
