@@ -164,7 +164,6 @@ namespace SocialMediaAppAPI.Controllers
             if (authenticatedUser == null)
             {
                 return BadRequest();
-                return Unauthorized();
             }
 
             if (page == 0)
