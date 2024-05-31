@@ -5,18 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/nav.js"></script>
 </head>
-<body>
-    <header>
-        <ul>
+<body class="h-screen max-h-screen flex flex-col">
+    <header class="py-2 fixed z-10 bg-white w-full">
+        <ul class="flex uppercase text-2xl w-full justify-center gap-8">
             @await Html.PartialAsync("NavLink", new NavLink("Dashboard", "/"))
-            <li>Dashboard</li>
-            <li>Posts</li>
-            <li>Comments</li>
-            <li>Users</li>
         </ul>
     </header>
-    <main role="main">
+    <main role="main" class="bg-gray-400 w-full h-full p-6 pt-20">
         @RenderBody()
     </main>
 
