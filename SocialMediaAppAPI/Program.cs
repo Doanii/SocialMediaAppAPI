@@ -12,6 +12,8 @@ namespace SocialMediaAppAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Configuration.AddJsonFile("appsettings.SocialMediaAppAPI.json", optional: false, reloadOnChange: true);
+
             // Add services to the container.
             builder.Services.AddControllers();
 
