@@ -1,10 +1,8 @@
-
-using Dashboard.Data;
-using Dashboard.Hubs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using SocialMediaAppAPI.Data;
 using SocialMediaAppAPI.Types.Middlewares;
+using System.Text.Json.Serialization;
 
 namespace SocialMediaAppAPI
 {
@@ -18,6 +16,12 @@ namespace SocialMediaAppAPI
 
             // Add services to the container.
             builder.Services.AddControllers();
+
+            builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+                });
 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services.AddDbContext<APIDbContext>(options =>

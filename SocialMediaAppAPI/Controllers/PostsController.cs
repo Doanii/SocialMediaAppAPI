@@ -4,7 +4,6 @@ using SocialMediaAppAPI.Data;
 using SocialMediaAppAPI.Models;
 using SocialMediaAppAPI.Types.Attributes;
 using SocialMediaAppAPI.Types.Requests;
-using Dashboard.Hubs;
 
 namespace SocialMediaAppAPI.Controllers
 {

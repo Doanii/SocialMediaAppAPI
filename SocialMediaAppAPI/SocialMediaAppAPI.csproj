@@ -25,7 +25,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ClassLibrary\ClassLibrary.csproj" />
-    <ProjectReference Include="..\Dashboard\Dashboard.csproj" />
   </ItemGroup>
 
   <ItemGroup>
