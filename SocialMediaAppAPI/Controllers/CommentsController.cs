@@ -47,8 +47,8 @@ namespace SocialMediaAppAPI.Controllers
         }
 
         // GET: api/Comments/5
-        [HttpGet("{page}/{amount}")]
-        public async Task<ActionResult<IEnumerable<CommentDTO>>> GetComments(int page, int amount)
+        [HttpGet("{postId}/{page}/{amount}")]
+        public async Task<ActionResult<IEnumerable<CommentDTO>>> GetComments(Guid postId, int page, int amount)
         {
             if (page == 0)
                 page = 1;
@@ -64,7 +64,9 @@ namespace SocialMediaAppAPI.Controllers
                 PostId = comment.PostId,
                 Content = comment.Content,
                 CommentedAt = comment.CommentedAt,
+                UserName = _context.Users.Where(u => u.Id == comment.UserId).Select(u => u.UserName).FirstOrDefault(),
             })
+            .Where(c => c.PostId == postId)
             .Skip(skip)
             .Take(amount)
             .ToListAsync();
@@ -119,6 +121,9 @@ namespace SocialMediaAppAPI.Controllers
                 Content = comment.Content,
                 CommentedAt = DateTime.Now
             };
+
+            Post post = await _context.Posts.FirstOrDefaultAsync(p => p.Id == comment.PostId);
+            post.CommentCount++;
 
             _context.Comments.Add(createdComment);
             await _context.SaveChangesAsync();
