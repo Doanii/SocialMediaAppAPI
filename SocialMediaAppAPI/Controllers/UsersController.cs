@@ -74,6 +74,31 @@ namespace SocialMediaAppAPI.Controllers
             return userDto;
         }
 
+        // GET: api/CurrentUser
+        [HttpGet("/api/CurrentUser")]
+        [ValidateApiToken]
+        public async Task<ActionResult<IEnumerable<UserDTO>>> GetCurrentUser()
+        {
+            var authenticatedUser = GetAuthenticatedUser();
+            if (authenticatedUser == null)
+            {
+                return Unauthorized();
+            }
+
+            return await _context.Users
+                .Select(user => new UserDTO
+                {
+                    Id = user.Id,
+                    Name = user.Name,
+                    Email = user.Email,
+                    UserName = user.UserName,
+                    FollowCount = user.FollowCount,
+                    IsFollowing = _context.Followers.Any(f => f.UserId == authenticatedUser.Id && f.FollowedUserId == user.Id)
+                })
+                .Where(user => user.Id == authenticatedUser.Id)
+                .ToListAsync();
+        }
+
         // POST: api/Register
         [HttpPost("/api/Register")]
         public async Task<ActionResult<UserDTO>> Register(CreateUserDTO createUserDto)

@@ -84,9 +84,6 @@ namespace SocialMediaAppAPI.Controllers
             {
                 // Relationship exists, so remove it (unfollow)
                 _context.Followers.Remove(existingFollower);
-                await _context.SaveChangesAsync();
-
-                return Ok(new { message = "Unfollowed successfully" });
             }
             else
             {
@@ -99,27 +96,38 @@ namespace SocialMediaAppAPI.Controllers
                 };
 
                 _context.Followers.Add(followers);
-                await _context.SaveChangesAsync();
-
-                // Retrieve the followed user
-                var followedUser = await _context.Users.FindAsync(followedUserId);
-                if (followedUser == null)
-                {
-                    return NotFound();
-                }
-
-                var followedUserDto = new UserDTO
-                {
-                    Id = followedUser.Id,
-                    Name = followedUser.Name,
-                    Email = followedUser.Email,
-                    UserName = followedUser.UserName,
-                    FollowCount = followedUser.FollowCount
-                };
-
-                // Return the followed user
-                return CreatedAtAction("GetFollowers", new { id = followers.FollowedUserId }, followedUserDto);
             }
+
+            // Retrieve the followed user
+            var followedUser = await _context.Users.FindAsync(followedUserId);
+            if (followedUser == null)
+            {
+                return NotFound();
+            }
+
+            if (existingFollower != null)
+            {
+                followedUser.FollowCount--;
+            } else
+            {
+                followedUser.FollowCount++;
+            }
+
+            await _context.SaveChangesAsync();
+
+
+            var followedUserDto = new UserDTO
+            {
+                Id = followedUser.Id,
+                Name = followedUser.Name,
+                Email = followedUser.Email,
+                UserName = followedUser.UserName,
+                FollowCount = followedUser.FollowCount,
+                IsFollowing = existingFollower == null
+            };
+
+            // Return the followed user
+            return CreatedAtAction("GetFollowers", followedUserDto);
         }
 
         private User? GetAuthenticatedUser()
