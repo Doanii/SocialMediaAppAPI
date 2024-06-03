@@ -8,12 +8,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SocialMediaAppAPI.Data;
 using SocialMediaAppAPI.Models;
+using SocialMediaAppAPI.Types.Attributes;
 using SocialMediaAppAPI.Types.Requests;
 
 namespace SocialMediaAppAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ValidateApiToken]
     public class CommentsController : ControllerBase
     {
         private readonly APIDbContext _context;
@@ -21,6 +23,11 @@ namespace SocialMediaAppAPI.Controllers
         public CommentsController(APIDbContext context)
         {
             _context = context;
+        }
+
+        private User GetAuthenticatedUser()
+        {
+            return HttpContext.Items["AuthenticatedUser"] as User;
         }
 
         // GET: api/Comments/5
@@ -98,10 +105,16 @@ namespace SocialMediaAppAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Comments>> PostComments(CreateCommentDTO comment)
         {
+            var authenticatedUser = GetAuthenticatedUser();
+            if (authenticatedUser == null)
+            {
+                return Unauthorized();
+            }
+
             var createdComment = new Comments
             {
                 CommentId = Guid.NewGuid(),
-                UserId = comment.UserId,
+                UserId = authenticatedUser.Id,
                 PostId = comment.PostId,
                 Content = comment.Content,
                 CommentedAt = DateTime.Now
