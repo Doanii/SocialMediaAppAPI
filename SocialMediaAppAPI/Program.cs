@@ -16,6 +16,7 @@ namespace SocialMediaAppAPI
 
             // Add services to the container.
             builder.Services.AddControllers();
+            builder.Services.AddCors();
 
             builder.Services.AddControllers()
                 .AddJsonOptions(options =>
@@ -56,6 +57,12 @@ namespace SocialMediaAppAPI
             });
 
             var app = builder.Build();
+
+            app.UseCors(x => x
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .SetIsOriginAllowed(origin => true)
+                    .AllowCredentials());
 
             app.UseMiddleware<ApiTokenMiddleware>();
 
