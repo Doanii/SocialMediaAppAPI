@@ -1,8 +1,8 @@
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using SocialMediaAppAPI.Data;
 using SocialMediaAppAPI.Types.Middlewares;
+using System.Text.Json.Serialization;
 
 namespace SocialMediaAppAPI
 {
@@ -12,8 +12,17 @@ namespace SocialMediaAppAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Configuration.AddJsonFile("appsettings.SocialMediaAppAPI.json", optional: false, reloadOnChange: true);
+
             // Add services to the container.
             builder.Services.AddControllers();
+            builder.Services.AddCors();
+
+            builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+                });
 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services.AddDbContext<APIDbContext>(options =>
@@ -48,6 +57,12 @@ namespace SocialMediaAppAPI
             });
 
             var app = builder.Build();
+
+            app.UseCors(x => x
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .SetIsOriginAllowed(origin => true)
+                    .AllowCredentials());
 
             app.UseMiddleware<ApiTokenMiddleware>();
 

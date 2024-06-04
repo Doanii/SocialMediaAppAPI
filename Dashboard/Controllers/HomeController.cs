@@ -17,16 +17,20 @@ namespace Dashboard.Controllers
         {
             return View();
         }
-
-        public IActionResult Privacy()
+        
+        public IActionResult Posts()
         {
             return View();
         }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        
+        public IActionResult Comments()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View();
+        }
+        
+        public IActionResult Users()
+        {
+            return View();
         }
     }
 }

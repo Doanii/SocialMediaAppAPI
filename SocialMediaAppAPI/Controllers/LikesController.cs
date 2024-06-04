@@ -49,6 +49,7 @@ namespace SocialMediaAppAPI.Controllers
             Likes like = await _context.Likes
                 .Where(l => l.PostId == postId && l.UserId == authenticatedUser.Id)
                 .FirstOrDefaultAsync();
+            Post post = await _context.Posts.FirstOrDefaultAsync(p => p.Id == postId);
 
             if (like == null)
             {
@@ -59,12 +60,14 @@ namespace SocialMediaAppAPI.Controllers
                     LikedAt = DateTime.Now,
                 };
 
+                post.LikeCount++;
                 _context.Likes.Add(newLike);
                 await _context.SaveChangesAsync();
 
                 return true;
             }
 
+            post.LikeCount--;
             _context.Likes.Remove(like);
             await _context.SaveChangesAsync();
 

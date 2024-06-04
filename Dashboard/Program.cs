@@ -1,3 +1,9 @@
+using Dashboard.Data;
+using Dashboard.Hubs;
+using Dashboard.MiddlewareExtentions;
+using Dashboard.Subscriptions;
+using Microsoft.EntityFrameworkCore;
+
 namespace Dashboard
 {
     public class Program
@@ -8,6 +14,16 @@ namespace Dashboard
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddSignalR();
+
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
+            builder.Services.AddDbContext<DashboardDbContext>(options =>
+                options.UseSqlServer(connectionString), ServiceLifetime.Singleton);
+
+            builder.Services.AddSingleton<DashboardHub>();
+            builder.Services.AddSingleton<PostTableDependency>();
+            builder.Services.AddSingleton<UserTableDependency>();
 
             var app = builder.Build();
 
@@ -29,6 +45,9 @@ namespace Dashboard
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            app.MapHub<DashboardHub>("/DashboardHub");
+            app.UsePhotoTableDependency(connectionString);
 
             app.Run();
         }
