@@ -46,7 +46,9 @@ namespace SocialMediaAppAPI.Controllers
                 return Unauthorized();
             }
 
-            Likes like = await _context.Likes.FirstOrDefaultAsync(l => l.PostId == postId);
+            Likes like = await _context.Likes
+                .Where(l => l.PostId == postId && l.UserId == authenticatedUser.Id)
+                .FirstOrDefaultAsync();
             Post post = await _context.Posts.FirstOrDefaultAsync(p => p.Id == postId);
 
             if (like == null)
