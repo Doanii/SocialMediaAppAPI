@@ -1,6 +1,5 @@
 ﻿using Dashboard.Hubs;
 using SocialMediaAppAPI.Models;
-using System.Runtime.CompilerServices;
 using TableDependency.SqlClient;
 
 namespace Dashboard.Subscriptions
