@@ -20,6 +20,7 @@ namespace SocialMediaAppAPI.Models
         [Required]
         public string UserName { get; set; } = string.Empty;
         public int FollowCount { get; set; } = 0;
+        public int FollowingCount { get; set; } = 0;
 
         [Required]
         public string ApiToken { get; set; }

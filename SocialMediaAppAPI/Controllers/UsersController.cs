@@ -45,6 +45,7 @@ namespace SocialMediaAppAPI.Controllers
                     Email = user.Email,
                     UserName = user.UserName,
                     FollowCount = user.FollowCount,
+                    FollowingCount = user.FollowingCount,
                     IsFollowing = _context.Followers.Any(f => f.UserId == authenticatedUser.Id && f.FollowedUserId == user.Id)
                 })
                 .ToListAsync();
@@ -68,7 +69,8 @@ namespace SocialMediaAppAPI.Controllers
                 Name = user.Name,
                 Email = user.Email,
                 UserName = user.UserName,
-                FollowCount = user.FollowCount
+                FollowCount = user.FollowCount,
+                FollowingCount = user.FollowingCount,
             };
 
             return userDto;
@@ -93,6 +95,7 @@ namespace SocialMediaAppAPI.Controllers
                     Email = user.Email,
                     UserName = user.UserName,
                     FollowCount = user.FollowCount,
+                    FollowingCount = user.FollowingCount,
                     IsFollowing = _context.Followers.Any(f => f.UserId == authenticatedUser.Id && f.FollowedUserId == user.Id)
                 })
                 .Where(user => user.Id == authenticatedUser.Id)
@@ -111,6 +114,7 @@ namespace SocialMediaAppAPI.Controllers
                 Password = PasswordHasher.HashPassword(createUserDto.Password),
                 UserName = createUserDto.UserName,
                 FollowCount = 0,
+                FollowingCount = 0,
                 ApiToken = GenerateString.Generate()
             };
 
