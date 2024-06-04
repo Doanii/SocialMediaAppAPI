@@ -77,6 +77,7 @@ namespace SocialMediaAppAPI.Controllers
             }
 
             // Check if the follow relationship already exists
+
             var existingFollower = await _context.Followers
                 .FirstOrDefaultAsync(f => f.UserId == authenticatedUser.Id && f.FollowedUserId == followedUserId);
 
@@ -100,6 +101,7 @@ namespace SocialMediaAppAPI.Controllers
 
             // Retrieve the followed user
             var followedUser = await _context.Users.FindAsync(followedUserId);
+            var currentUser = await _context.Users.FirstAsync(u => u.Id == authenticatedUser.Id);
             if (followedUser == null)
             {
                 return NotFound();
@@ -108,9 +110,12 @@ namespace SocialMediaAppAPI.Controllers
             if (existingFollower != null)
             {
                 followedUser.FollowCount--;
-            } else
+                currentUser.FollowingCount--;
+            }
+            else
             {
                 followedUser.FollowCount++;
+                currentUser.FollowingCount++;
             }
 
             await _context.SaveChangesAsync();
