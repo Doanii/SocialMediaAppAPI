@@ -63,6 +63,51 @@ namespace SocialMediaAppAPI.Controllers
             return Ok(post);
         }
 
+        // GET: api/Posts/5
+        [HttpGet("{userId}/{page}/{amount}")]
+        public async Task<ActionResult<PostDTO>> GetPostsOfUser(Guid userId, int page, int amount)
+        {
+            var authenticatedUser = GetAuthenticatedUser();
+            if (authenticatedUser == null)
+            {
+                return Unauthorized();
+            }
+
+            if (page == 0)
+                page = 1;
+
+            if (amount == 0)
+                amount = int.MaxValue;
+
+            var skip = (page - 1) * amount;
+
+            var posts = await _context.Posts
+                .Where(c => c.UserId == userId)
+                .Skip(skip)
+                .Take(amount)
+                .Select(post => new PostDTO
+                {
+                    Id = post.Id,
+                    Content = post.Content,
+                    OPUsername = _context.Users.Where(u => u.Id == post.UserId).Select(u => u.UserName).FirstOrDefault(),
+                    Following = _context.Followers.Any(f => f.UserId == authenticatedUser.Id && f.FollowedUserId == post.UserId),
+                    LikeCount = post.LikeCount,
+                    CommentCount = post.CommentCount,
+                    CreatedAt = post.CreatedAt,
+                    UserId = post.UserId,
+                    Attachments = post.Attachments
+                })
+                .OrderByDescending(p => p.CreatedAt)
+                .ToListAsync();
+
+            if (posts == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(posts);
+        }
+
         // GET: api/Feed/Following/{page}/{amount}
         [HttpGet("/api/Feed/Following/{page}/{amount}")]
         public async Task<ActionResult<IEnumerable<PostDTO>>> GetFollowingFeed(int page, int amount)
