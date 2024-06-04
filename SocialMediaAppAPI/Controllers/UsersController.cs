@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace SocialMediaAppAPI.Controllers
@@ -106,13 +107,58 @@ namespace SocialMediaAppAPI.Controllers
         [HttpPost("/api/Register")]
         public async Task<ActionResult<UserDTO>> Register(CreateUserDTO createUserDto)
         {
+            var errors = new List<string>();
+
+            // Email validation regex pattern
+            var emailRegex = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+
+            if (!Regex.IsMatch(createUserDto.Email, emailRegex))
+            {
+                // If the email is not in a valid format, add to errors
+                errors.Add("Invalid email format");
+            }
+
+            // Username validation: convert to lowercase, remove spaces, and check for allowed characters
+            var username = createUserDto.UserName.ToLower();
+            var usernameRegex = @"^[a-z0-9._-]+$";
+
+            if (username.Contains(" ") || !Regex.IsMatch(username, usernameRegex))
+            {
+                // If the username is invalid, add to errors
+                errors.Add("Invalid username. Only lowercase letters, numbers, and the special characters '_', '.', '-' are allowed, and no spaces.");
+            }
+
+            // Check if the email already exists in the database
+            var existingUserWithSameEmail = _context.Users.FirstOrDefault(u => u.Email == createUserDto.Email);
+
+            if (existingUserWithSameEmail != null)
+            {
+                // If the email already exists, add to errors
+                errors.Add("Email already exists");
+            }
+
+            // Check if the username already exists in the database
+            var existingUserWithSameUsername = _context.Users.FirstOrDefault(u => u.UserName == username);
+
+            if (existingUserWithSameUsername != null)
+            {
+                // If the username already exists, add to errors
+                errors.Add("Username already exists");
+            }
+
+            // If there are any errors, return them
+            if (errors.Count > 0)
+            {
+                return BadRequest(errors);
+            }
+
             var user = new User
             {
                 Id = Guid.NewGuid(),
                 Name = createUserDto.Name,
                 Email = createUserDto.Email,
                 Password = PasswordHasher.HashPassword(createUserDto.Password),
-                UserName = createUserDto.UserName,
+                UserName = username,
                 FollowCount = 0,
                 FollowingCount = 0,
                 ApiToken = GenerateString.Generate()
