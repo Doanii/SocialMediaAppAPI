@@ -13,6 +13,6 @@ namespace SocialMediaAppAPI.Types.Requests
         public int CommentCount { get; set; }
         public DateTime CreatedAt { get; set; }
         public Guid UserId { get; set; }
-        public ICollection<Attachments> Attachments { get; set; }
+        public ICollection<Attachment> Attachments { get; set; }
     }
 }

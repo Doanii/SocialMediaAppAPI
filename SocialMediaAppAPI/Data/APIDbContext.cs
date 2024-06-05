@@ -12,7 +12,7 @@ namespace SocialMediaAppAPI.Data
         public DbSet<Post> Posts { get; set; }
         public DbSet<Likes> Likes { get; set; }
         public DbSet<Comments> Comments { get; set; }
-        public DbSet<Attachments> Attachments { get; set; }
+        public DbSet<Attachment> Attachments { get; set; }
         public DbSet<Activity> Activities { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -75,7 +75,7 @@ namespace SocialMediaAppAPI.Data
                 .HasForeignKey(c => c.PostId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Attachments>()
+            modelBuilder.Entity<Attachment>()
                 .HasOne(a => a.Post)
                 .WithMany(p => p.Attachments)
                 .HasForeignKey(a => a.PostId);

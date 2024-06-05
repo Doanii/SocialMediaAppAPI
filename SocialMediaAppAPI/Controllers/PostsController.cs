@@ -105,6 +105,22 @@ namespace SocialMediaAppAPI.Controllers
             return Ok(posts);
         }
 
+        [HttpGet("{id}/Attachments/")]
+        public async Task<ActionResult<IEnumerable<Attachment>>> GetAttachments(Guid id)
+        {
+            var authenticatedUser = GetAuthenticatedUser();
+            if (authenticatedUser == null)
+            {
+                return Unauthorized();
+            }
+
+            var attachments = await _context.Attachments
+                .Where(a => a.PostId == id)
+                .ToListAsync();
+
+            return Ok(attachments);
+        }
+
         // GET: api/Feed/Following/{page}/{amount}
         [HttpGet("/api/Feed/Following/{page}/{amount}")]
         public async Task<ActionResult<IEnumerable<PostDTO>>> GetFollowingFeed(int page, int amount)

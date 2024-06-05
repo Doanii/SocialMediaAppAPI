@@ -17,7 +17,7 @@ namespace SocialMediaAppAPI.Models
         public Guid UserId { get; set; }
         public User User { get; set; }
 
-        public ICollection<Attachments> Attachments { get; set; }
+        public ICollection<Attachment> Attachments { get; set; }
         public ICollection<Likes> Likes { get; set; }
         public ICollection<Comments> Comments { get; set; }
     }

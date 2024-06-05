@@ -36,7 +36,6 @@ namespace SocialMediaAppAPI.Controllers
             {
                 return Unauthorized();
             }
-            //_context.DropAllTables();
 
             return await _context.Users
                 .Select(user => new UserDTO
