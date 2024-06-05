@@ -7,6 +7,7 @@ namespace SocialMediaAppAPI.Types.Requests
         public Guid Id { get; set; }
         public string Content { get; set; }
         public string OPUsername { get; set; }
+        public string OPName { get; set; }
         public bool Following { get; set; }
         public bool IsLiked { get; set; }
         public int LikeCount { get; set; }
