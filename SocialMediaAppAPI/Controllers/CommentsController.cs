@@ -119,7 +119,7 @@ namespace SocialMediaAppAPI.Controllers
                 UserId = authenticatedUser.Id,
                 PostId = comment.PostId,
                 Content = comment.Content,
-                CommentedAt = DateTime.Now
+                CommentedAt = DateTime.UtcNow
             };
 
             Post post = await _context.Posts.FirstOrDefaultAsync(p => p.Id == comment.PostId);

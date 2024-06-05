@@ -314,7 +314,7 @@ namespace SocialMediaAppAPI.Controllers
                 Content = post.Content,
                 LikeCount = 0,
                 CommentCount = 0,
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.UtcNow
             };
 
             _context.Posts.Add(createdPost);

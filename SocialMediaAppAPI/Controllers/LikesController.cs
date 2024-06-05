@@ -57,7 +57,7 @@ namespace SocialMediaAppAPI.Controllers
                 {
                     PostId = postId,
                     UserId = authenticatedUser.Id,
-                    LikedAt = DateTime.Now,
+                    LikedAt = DateTime.UtcNow,
                 };
 
                 post.LikeCount++;
