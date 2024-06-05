@@ -56,6 +56,12 @@ namespace SocialMediaAppAPI.Controllers
         [ValidateApiToken]
         public async Task<ActionResult<UserDTO>> GetUser(Guid id)
         {
+            var authenticatedUser = GetAuthenticatedUser();
+            if (authenticatedUser == null)
+            {
+                return Unauthorized();
+            }
+
             var user = await _context.Users.FindAsync(id);
 
             if (user == null)
@@ -71,6 +77,7 @@ namespace SocialMediaAppAPI.Controllers
                 UserName = user.UserName,
                 FollowCount = user.FollowCount,
                 FollowingCount = user.FollowingCount,
+                IsFollowing = _context.Followers.Any(f => f.UserId == authenticatedUser.Id && f.FollowedUserId == user.Id)
             };
 
             return userDto;
