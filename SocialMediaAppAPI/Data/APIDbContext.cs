@@ -84,6 +84,14 @@ namespace SocialMediaAppAPI.Data
                 .HasOne(a => a.User)
                 .WithMany()
                 .HasForeignKey(a => a.UserId);
+
+            modelBuilder.Entity<User>().ToTable("Users", tb => tb.HasTrigger("iwjdij"));
+            modelBuilder.Entity<Followers>().ToTable("Followers", tb => tb.HasTrigger("iwjdij"));
+            modelBuilder.Entity<Post>().ToTable("Posts", tb => tb.HasTrigger("iwjdij"));
+            modelBuilder.Entity<Likes>().ToTable("Likes", tb => tb.HasTrigger("iwjdij"));
+            modelBuilder.Entity<Comments>().ToTable("Comments", tb => tb.HasTrigger("iwjdij"));
+            modelBuilder.Entity<Attachment>().ToTable("Attachments", tb => tb.HasTrigger("iwjdij"));
+            modelBuilder.Entity<Activity>().ToTable("Activities", tb => tb.HasTrigger("iwjdij"));
         }
 
         public void DropAllTables()
