@@ -80,8 +80,6 @@ namespace SocialMediaAppAPI.Controllers
 
             var posts = await _context.Posts
                 .Where(c => c.UserId == userId)
-                .Skip(skip)
-                .Take(amount)
                 .Select(post => new PostDTO
                 {
                     Id = post.Id,
@@ -97,6 +95,8 @@ namespace SocialMediaAppAPI.Controllers
                     Attachments = post.Attachments
                 })
                 .OrderByDescending(p => p.CreatedAt)
+                .Skip(skip)
+                .Take(amount)
                 .ToListAsync();
 
             if (posts == null)
