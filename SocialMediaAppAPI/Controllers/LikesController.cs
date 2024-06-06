@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration.UserSecrets;
 using SocialMediaAppAPI.Data;
 using SocialMediaAppAPI.Models;
+using SocialMediaAppAPI.Services;
 using SocialMediaAppAPI.Types.Attributes;
 
 namespace SocialMediaAppAPI.Controllers
@@ -70,6 +71,9 @@ namespace SocialMediaAppAPI.Controllers
             post.LikeCount--;
             _context.Likes.Remove(like);
             await _context.SaveChangesAsync();
+
+            ActivityService activityService = new ActivityService(_context);
+            Activity activity = await activityService.CreateActivity(authenticatedUser, Types.Enum.ActivityEnum.Posted, $"{authenticatedUser.UserName} heeft een post geliket.");
 
             return false;
         }

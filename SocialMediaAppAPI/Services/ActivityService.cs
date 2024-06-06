@@ -23,7 +23,8 @@ namespace SocialMediaAppAPI.Services
                 Id = Guid.NewGuid(),
                 Content = content,
                 Type = type,
-                UserId = user.Id
+                UserId = user.Id,
+                CreatedAt = DateTime.UtcNow
             };
 
             _dbContext.Activities.Add(activity);

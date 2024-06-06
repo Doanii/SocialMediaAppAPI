@@ -4,6 +4,7 @@ using SocialMediaAppAPI.Data;
 using SocialMediaAppAPI.Models;
 using SocialMediaAppAPI.Types.Attributes;
 using SocialMediaAppAPI.Types.Requests;
+using SocialMediaAppAPI.Services;
 
 namespace SocialMediaAppAPI.Controllers
 {
@@ -319,6 +320,9 @@ namespace SocialMediaAppAPI.Controllers
 
             _context.Posts.Add(createdPost);
             await _context.SaveChangesAsync();
+
+            ActivityService activityService = new ActivityService(_context);
+            Activity activity = await activityService.CreateActivity(authenticatedUser, Types.Enum.ActivityEnum.Posted, $"{authenticatedUser.UserName} heeft een nieuwe post geplaatst.");
 
             return CreatedAtAction("GetPost", new { id = createdPost.Id }, createdPost);
         }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SocialMediaAppAPI.Data;
 using SocialMediaAppAPI.Models;
+using SocialMediaAppAPI.Services;
 using SocialMediaAppAPI.Types.Attributes;
 using SocialMediaAppAPI.Types.Requests.Followers;
 using SocialMediaAppAPI.Types.Requests.Users;
@@ -111,11 +112,17 @@ namespace SocialMediaAppAPI.Controllers
             {
                 followedUser.FollowCount--;
                 currentUser.FollowingCount--;
+
+                ActivityService activityService = new ActivityService(_context);
+                Activity activity = await activityService.CreateActivity(authenticatedUser, Types.Enum.ActivityEnum.Posted, $"@{authenticatedUser.UserName} heeft @{followedUser.UserName} ontvolgd.");
             }
             else
             {
                 followedUser.FollowCount++;
                 currentUser.FollowingCount++;
+
+                ActivityService activityService = new ActivityService(_context);
+                Activity activity = await activityService.CreateActivity(authenticatedUser, Types.Enum.ActivityEnum.Posted, $"@{authenticatedUser.UserName} volgt nu @{followedUser.UserName}.");
             }
 
             await _context.SaveChangesAsync();
