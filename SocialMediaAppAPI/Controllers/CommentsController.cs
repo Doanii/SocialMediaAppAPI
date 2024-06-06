@@ -61,6 +61,7 @@ namespace SocialMediaAppAPI.Controllers
 
             return await _context.Comments.Select(comment => new CommentDTO
             {
+                CommentId = comment.CommentId,
                 UserId = comment.UserId,
                 PostId = comment.PostId,
                 Content = comment.Content,
