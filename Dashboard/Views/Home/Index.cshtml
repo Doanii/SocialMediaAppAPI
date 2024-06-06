@@ -7,7 +7,7 @@
         <div class="bg-white backdrop-blur-2xl p-6 rounded w-full h-full row-span-2 sm:row-span-3">
             <canvas id="myChart"> </canvas>
         </div>
-        <div class="grid row-span-2 sm:row-span-1 sm:grid-cols-3 gap-6 h-full">
+        <div class="grid row-span-2 sm:row-span-1 sm:grid-cols-3 gap-6">
             <div class="hidden sm:block"></div>
             <div class="bg-white/50 backdrop-blur-2xl p-6 rounded w-full h-full uppercase text-sm">
                 <div class="font-black text-green-700 text-xl" id="UserCount">0</div>
@@ -18,49 +18,25 @@
                 total posts / total posts today
             </div>
         </div>
-        <div class="bg-white/50 backdrop-blur-2xl p-6 rounded w-full h-full row-span-2">
-            Hier komen charts
+        <div class="row-span-2 sm:row-span-3 bg-white/50 backdrop-blur-2xl p-6 rounded w-full h-full order-first lg:order-none flex flex-row gap-6">
+            <div class="w-full h-full flex flex-col">
+                <div class="font-bold text-lg mb-4">Activiteiten logboek</div>
+                <div id="activities" class="flex-grow bg-white/50 backdrop-blur-2xl p-6 rounded overflow-y-scroll">
+                </div>
+            </div>
+            <div class="w-full h-full flex flex-col">
+                <div class="font-bold text-lg mb-4">Meest actieve gebruikers</div>
+                <div id="mostActiveUsers" class="flex-grow bg-white/50 backdrop-blur-2xl p-6 rounded overflow-y-scroll">
+                </div>
+            </div>
+            <div class="w-full h-full flex flex-col">
+                <div class="font-bold text-lg mb-4">Populairste berichten</div>
+                <div id="mostPopulairPosts" class="flex-grow bg-white/50 backdrop-blur-2xl p-6 rounded overflow-y-scroll">
+                </div>
+            </div>
         </div>
     </div>
-    <div class="bg-white/50 backdrop-blur-2xl p-6 rounded w-full h-full order-first lg:order-none flex flex-col gap-6 overflow-y-scroll">
-        <div class="bg-white p-6 rounded flex gap-6">
-            @* <img src="img/profilepic.png" class="rounded-full w-16" alt="Profile"/> *@
-            <div>
-                <div>
-                    <span class="font-bold">Jeanette</span>
-                    <span class="font-thin">@@jeanette</span>
-                </div>
-                <div>
-                    Hallo, hoe werkt deze app? ik kan niet wachten om te beginnen! Waar kan ik je weer volgen?
-                </div>
-            </div>
-        </div>
-        <div class="bg-white p-6 rounded grid grid-cols-2 gap-6">
-            @* <img src="img/profilepic.png" class="rounded-full w-16" alt="Profile"/> *@
-            <div>
-                <div>
-                    <span class="font-bold">Jeanette</span>
-                    <span class="font-thin">@@jeanette</span>
-                </div>
-                <div>
-                    Hallo, hoe werkt deze app? ik kan niet wachten om te beginnen! Waar kan ik je weer volgen?
-                </div>
-            </div>
-            <img src="img/88149.jpg" class="rounded" alt="Post"/>
-        </div>
-        <div class="bg-white p-6 rounded grid grid-cols-2 gap-6">
-            @* <img src="img/profilepic.png" class="rounded-full w-16" alt="Profile"/> *@
-            <div>
-                <div>
-                    <span class="font-bold">Jeanette</span>
-                    <span class="font-thin">@@jeanette</span>
-                </div>
-                <div>
-                    Hallo, hoe werkt deze app? ik kan niet wachten om te beginnen! Waar kan ik je weer volgen?
-                </div>
-            </div>
-            <img src="img/88149.jpg" class="rounded" alt="Post"/>
-        </div>
+    <div id="postsContainer" class="bg-white/50 backdrop-blur-2xl p-6 rounded w-full h-full order-first lg:order-none flex flex-col gap-6 overflow-y-scroll">
     </div>
 </div>
 

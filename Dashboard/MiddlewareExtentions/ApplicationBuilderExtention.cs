@@ -13,10 +13,12 @@ namespace Dashboard.MiddlewareExtentions
             // Initialize a service with the serverProvider
             var service = serviceProvider.GetService<PostTableDependency>();
             var serviceUser = serviceProvider.GetService<UserTableDependency>();
+            var serviceActivity = serviceProvider.GetService<ActivityTableDependency>();
 
             // Connect the service to the database with the connection string
             service!.SubscribeTableDependency(connectionString);
             serviceUser!.SubscribeTableDependency(connectionString);
+            serviceActivity!.SubscribeTableDependency(connectionString);
         }
     }
 }
