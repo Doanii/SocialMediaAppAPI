@@ -1,5 +1,6 @@
 ﻿using Dashboard.Data;
 using Dashboard.Data.Requests;
+using Dashboard.Types.Requests;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using SocialMediaAppAPI.Models;
@@ -12,13 +13,27 @@ namespace Dashboard.Hubs
 
         public async Task NewPostReceived()
         {
-            List<Post> posts = await dbContext.Posts
-                                      .OrderByDescending(p => p.CreatedAt)
-                                      .Take(10)
-                                      .ToListAsync();
+            var posts = await dbContext.Posts
+                .Join(dbContext.Users,
+                      post => post.UserId,
+                      user => user.Id,
+                      (post, user) => new PostDTO
+                      {
+                          Id = post.Id,
+                          Content = post.Content,
+                          OPUsername = user.UserName,
+                          LikeCount = post.LikeCount,
+                          CommentCount = post.CommentCount,
+                          CreatedAt = post.CreatedAt,
+                          UserId = post.UserId,
+                      })
+                .OrderByDescending(p => p.CreatedAt)
+                .Take(10)
+                .ToListAsync();
 
             await Clients.All.SendAsync("NewPostReceived", posts);
         }
+
 
         public async Task<int> TotalPosts()
         {

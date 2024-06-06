@@ -26,8 +26,8 @@ namespace Dashboard.Subscriptions
             if (e.ChangeType != TableDependency.SqlClient.Base.Enums.ChangeType.None)
             {
                 await dashboardHub.TotalPosts();
-                await dashboardHub.NewPostsToday(); 
-                //dashboardHub.NewPostReceived();
+                await dashboardHub.NewPostsToday();
+                await dashboardHub.NewPostReceived();
             }
         }
 
