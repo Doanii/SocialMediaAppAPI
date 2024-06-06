@@ -8,26 +8,27 @@
         <div class="flex gap-6 h-[50%]">
             <div class="bg-white/50 backdrop-blur-2xl p-6 rounded w-full overflow-clip">
                 <div class="bg-white p-6 rounded h-full flex justify-center">
-                    <canvas class="max-h-full" id="myChart"> </canvas>
+                    <canvas class="max-h-full" id="myChart"></canvas>
                 </div>
             </div>
-            <div class="grid bg-white/50 backdrop-blur-2xl p-6 rounded gap-6">
-                <div class="capitalize text-3xl text-center text-white font-bold flex items-center justify-center">
-                    <div>
-                        total users:
-                        <span class="text-green-200 font-black ml-1" id="UserCount">0</span>
+            <div class="grid bg-white/50 backdrop-blur-2xl p-6 rounded gap-6 w-1/3">
+                <div class="flex flex-col items-center justify-center text-center text-white font-bold text-3xl">
+                    <div class="p-6">
+                        <div>Gebruikers</div>
+                        <div class="text-green-200 font-black" id="UserCount">0</div>
                     </div>
-                </div>
-                <div class="capitalize text-3xl text-center text-white font-bold flex items-center justify-center">
-                    total posts:
-                    <span class="text-green-200 font-black ml-2" id="TotalPostsCount">0</span>
-                </div>
-                <div class="capitalize text-3xl text-center text-white font-bold flex items-center justify-center">
-                    total posts today:
-                    <span class="text-green-200 font-black ml-2" id="NewPostsToday">0</span>
+                    <div class="p-6">
+                        <div>Totale posts</div>
+                        <div class="text-green-200 font-black" id="TotalPostsCount">0</div>
+                    </div>
+                    <div class="p-6">
+                        <div>Posts vandaag</div>
+                        <div class="text-green-200 font-black" id="NewPostsToday">0</div>
+                    </div>
                 </div>
             </div>
         </div>
+
 
         <div class="flex gap-6 h-[50%]">
             <div class="grid grid-cols-3 gap-6 h-full">
