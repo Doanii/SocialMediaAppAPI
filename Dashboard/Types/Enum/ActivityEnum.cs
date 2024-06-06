@@ -5,6 +5,7 @@
         Posted,
         Liked,
         Commented,
-        Followed
+        Followed,
+        Account
     }
 }

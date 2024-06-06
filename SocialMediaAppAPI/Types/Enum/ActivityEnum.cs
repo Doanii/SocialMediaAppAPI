@@ -6,6 +6,6 @@
         Liked,
         Commented,
         Followed,
-        AccountCreated
+        Account
     }
 }
