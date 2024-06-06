@@ -114,7 +114,7 @@ namespace SocialMediaAppAPI.Controllers
                 currentUser.FollowingCount--;
 
                 ActivityService activityService = new ActivityService(_context);
-                Activity activity = await activityService.CreateActivity(authenticatedUser, Types.Enum.ActivityEnum.Posted, $"@{authenticatedUser.UserName} heeft @{followedUser.UserName} ontvolgd.");
+                Activity activity = await activityService.CreateActivity(authenticatedUser, Types.Enum.ActivityEnum.Followed, $"@{authenticatedUser.UserName} heeft @{followedUser.UserName} ontvolgd.");
             }
             else
             {
@@ -122,7 +122,7 @@ namespace SocialMediaAppAPI.Controllers
                 currentUser.FollowingCount++;
 
                 ActivityService activityService = new ActivityService(_context);
-                Activity activity = await activityService.CreateActivity(authenticatedUser, Types.Enum.ActivityEnum.Posted, $"@{authenticatedUser.UserName} volgt nu @{followedUser.UserName}.");
+                Activity activity = await activityService.CreateActivity(authenticatedUser, Types.Enum.ActivityEnum.Followed, $"@{authenticatedUser.UserName} volgt nu @{followedUser.UserName}.");
             }
 
             await _context.SaveChangesAsync();

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SocialMediaAppAPI.Data;
 using SocialMediaAppAPI.Models;
+using SocialMediaAppAPI.Services;
 using SocialMediaAppAPI.Types.Attributes;
 using SocialMediaAppAPI.Types.Requests.Users;
 using System;
@@ -170,6 +171,9 @@ namespace SocialMediaAppAPI.Controllers
                 CreatedAt = DateTime.UtcNow,
                 ApiToken = GenerateString.Generate()
             };
+
+            ActivityService activityService = new ActivityService(_context);
+            Activity activity = await activityService.CreateActivity(user, Types.Enum.ActivityEnum.Liked, $"Nieuw account geregistreerd: @{user.UserName}.");
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();

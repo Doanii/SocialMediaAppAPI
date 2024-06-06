@@ -130,7 +130,7 @@ namespace SocialMediaAppAPI.Controllers
             await _context.SaveChangesAsync();
 
             ActivityService activityService = new ActivityService(_context);
-            Activity activity = await activityService.CreateActivity(authenticatedUser, Types.Enum.ActivityEnum.Posted, $"@{authenticatedUser.UserName} heeft een comment geplaatst.");
+            Activity activity = await activityService.CreateActivity(authenticatedUser, Types.Enum.ActivityEnum.Commented, $"@{authenticatedUser.UserName} heeft een comment geplaatst.");
 
             // Assuming you have an action called "GetComment" that takes commentId as a parameter
             return CreatedAtAction(nameof(GetComments), new { id = createdComment.CommentId }, createdComment);

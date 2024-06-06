@@ -73,7 +73,7 @@ namespace SocialMediaAppAPI.Controllers
             await _context.SaveChangesAsync();
 
             ActivityService activityService = new ActivityService(_context);
-            Activity activity = await activityService.CreateActivity(authenticatedUser, Types.Enum.ActivityEnum.Posted, $"{authenticatedUser.UserName} heeft een post geliket.");
+            Activity activity = await activityService.CreateActivity(authenticatedUser, Types.Enum.ActivityEnum.Liked, $"{authenticatedUser.UserName} heeft een post geliket.");
 
             return false;
         }
