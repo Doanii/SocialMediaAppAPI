@@ -1,0 +1,23 @@
+﻿@model Dashboard.Models.ViewModels.LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="flex justify-center items-center mt-20">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+        <h2 class="mb-6 text-center text-2xl font-bold">Login</h2>
+        <form asp-action="Login" method="post">
+            <div class="mb-4">
+                <input type="email" asp-for="Email" placeholder="Email" class="w-full p-2 border border-gray-300 rounded" />
+                <span asp-validation-for="Email" class="text-red-500"></span>
+            </div>
+            <div class="mb-4">
+                <input type="password" asp-for="Password" required placeholder="Password" class="w-full p-2 border border-gray-300 rounded" />
+                <span asp-validation-for="Password" class="text-red-500"></span>
+            </div>
+            <div asp-validation-summary="All" class="text-red-500 mb-4"></div>
+            <button type="submit" class="w-full py-2 px-4 bg-green-500 text-white rounded hover:bg-green-600">LOGIN</button>
+        </form>
+    </div>
+</div>

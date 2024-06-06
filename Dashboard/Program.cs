@@ -26,6 +26,8 @@ namespace Dashboard
             builder.Services.AddSingleton<UserTableDependency>();
             builder.Services.AddSingleton<ActivityTableDependency>();
 
+            builder.Services.AddHttpContextAccessor();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
