@@ -67,6 +67,7 @@ namespace SocialMediaAppAPI.Controllers
                 Content = comment.Content,
                 CommentedAt = comment.CommentedAt,
                 UserName = _context.Users.Where(u => u.Id == comment.UserId).Select(u => u.UserName).FirstOrDefault(),
+                Name = _context.Users.Where(u => u.Id == comment.UserId).Select(u => u.Name).FirstOrDefault()
             })
             .Where(c => c.PostId == postId)
             .Skip(skip)
