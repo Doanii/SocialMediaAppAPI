@@ -20,6 +20,14 @@ namespace Dashboard.Hubs
             await Clients.All.SendAsync("NewPostReceived", posts);
         }
 
+        public async Task<List<UserJoins>> UserJoinsPerDay()
+        {
+            var list = await dbContext.Users.GroupBy((user) => user.CreatedAt.Date)
+                .Select((g) => new UserJoins(g.Key, g.Count())).ToListAsync();
+            await Clients.All.SendAsync("UserJoinsPerDay", list);
+            return list;
+        }
+
         public async Task<int> TotalPosts()
         {
             int count = await dbContext.Posts.Select(p => new CountDTO { Id = p.Id }).CountAsync();

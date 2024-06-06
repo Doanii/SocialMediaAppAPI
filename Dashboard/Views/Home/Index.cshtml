@@ -4,8 +4,8 @@
 
 <div class="grid grid-cols-1 gap-6 h-full lg:grid-cols-3">
     <div class="grid grid-rows-6 gap-6 h-full lg:col-span-2">
-        <div class="bg-white/50 backdrop-blur-2xl p-6 rounded w-full h-full row-span-2 sm:row-span-3">
-            Hier komen charts
+        <div class="bg-white backdrop-blur-2xl p-6 rounded w-full h-full row-span-2 sm:row-span-3">
+            <canvas id="myChart"> </canvas>
         </div>
         <div class="grid row-span-2 sm:row-span-1 sm:grid-cols-3 gap-6 h-full">
             <div class="hidden sm:block"></div>
@@ -65,4 +65,5 @@
 </div>
 
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="~/js/dashboard.js"></script>
