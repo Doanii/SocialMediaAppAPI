@@ -125,7 +125,7 @@ namespace SocialMediaAppAPI.Controllers
             if (!Regex.IsMatch(createUserDto.Email, emailRegex))
             {
                 // If the email is not in a valid format, add to errors
-                errors.Add("Ongeldige email format");
+                errors.Add("Ongeldige email formaat");
             }
 
             // Username validation: convert to lowercase, remove spaces, and check for allowed characters
