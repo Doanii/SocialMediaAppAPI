@@ -24,6 +24,7 @@ namespace Dashboard
             builder.Services.AddSingleton<DashboardHub>();
             builder.Services.AddSingleton<PostTableDependency>();
             builder.Services.AddSingleton<UserTableDependency>();
+            builder.Services.AddSingleton<ActivityTableDependency>();
 
             var app = builder.Build();
 

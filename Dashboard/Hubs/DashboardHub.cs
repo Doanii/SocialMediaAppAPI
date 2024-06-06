@@ -10,6 +10,49 @@ namespace Dashboard.Hubs
 {
     public class DashboardHub(DashboardDbContext dbContext) : Hub
     {
+        public async Task MostPopularUsers()
+        {
+            // Query to find the top 3 users with the most activities
+            var topUsers = await dbContext.Activities
+                .GroupBy(a => a.UserId)  // Group by UserId
+                .Select(g => new { UserId = g.Key, Count = g.Count() })  // Select UserId and count of activities
+                .OrderByDescending(g => g.Count)  // Order by count descending
+                .Take(3)  // Take the top 3 results
+                .ToListAsync();  // Convert to a list
+
+            // If there are no activities, handle it appropriately
+            if (topUsers.Any())
+            {
+                // Query to get the usernames for the top 3 users
+                var topUserIds = topUsers.Select(u => u.UserId).ToList();  // Extract UserIds from top users
+
+                var userInfos = await dbContext.Users
+                    .Where(u => topUserIds.Contains(u.Id))  // Filter users by the UserIds found in the top users query
+                    .Select(u => new { u.Id, u.UserName })  // Select the UserId and UserName
+                    .ToListAsync();  // Convert to a list
+
+                // Combine the top user information with their usernames
+                var topUsersWithNames = topUsers
+                    .Join(userInfos,  // Join the top users with their corresponding usernames
+                          activity => activity.UserId,  // Join on UserId from top users
+                          user => user.Id,  // Join on Id from users
+                          (activity, user) => new  // Create a new anonymous object with required information
+                          {
+                              UserId = activity.UserId,
+                              UserName = user.UserName,
+                              ActivityCount = activity.Count
+                          })
+                    .ToList();  // Convert to a list
+
+                // Send the top 3 users' information to all clients
+                await Clients.All.SendAsync("MostPopularUsers", topUsersWithNames);
+            }
+            else
+            {
+                // Handle the case when no user is found
+                await Clients.All.SendAsync("MostPopularUsers", new List<object>());
+            }
+        }
 
         public async Task NewPostReceived()
         {
@@ -32,6 +75,36 @@ namespace Dashboard.Hubs
                 .ToListAsync();
 
             await Clients.All.SendAsync("NewPostReceived", posts);
+        }
+
+        public async Task MostPopulairPosts()
+        {
+            var posts = await dbContext.Posts
+                .Join(dbContext.Users,
+                    post => post.UserId,
+                    user => user.Id,
+                    (post, user) => new
+                    {
+                        Post = post,
+                        User = user
+                    })
+                .Select(joined => new PopulairPostDTO
+                {
+                    Id = joined.Post.Id,
+                    Content = joined.Post.Content,
+                    OPUsername = joined.User.UserName,
+                    LikeCount = joined.Post.LikeCount,
+                    CommentCount = joined.Post.CommentCount,
+                    CreatedAt = joined.Post.CreatedAt,
+                    UserId = joined.Post.UserId,
+                    ActivityScore = joined.Post.LikeCount + joined.Post.CommentCount
+                })
+                .OrderByDescending(p => p.ActivityScore)
+                .Take(3)
+                .ToListAsync();
+
+
+            await Clients.All.SendAsync("MostPopulairPosts", posts);
         }
 
 

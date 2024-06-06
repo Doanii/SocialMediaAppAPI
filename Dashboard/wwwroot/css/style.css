@@ -1,0 +1,6 @@
+﻿body {
+}
+
+.flex-grow {
+    flex-grow: 1; /* Make the element grow to fill the remaining space */
+}

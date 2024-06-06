@@ -20,6 +20,12 @@ const InvokeData = () => {
     connection.invoke("NewPostReceived").catch(function (err) {
         return console.error(err.toString());
     });
+    connection.invoke("MostPopulairPosts").catch(function (err) {
+        return console.error(err.toString());
+    });
+    connection.invoke("MostPopularUsers").catch(function (err) {
+        return console.error(err.toString());
+    });
 };
 
 const start = async () => {
@@ -49,8 +55,31 @@ connection.on("UserCount", (count) => {
     document.getElementById("UserCount").innerHTML = count;
 });
 
+connection.on("MostPopularUsers", (users) => {
+    console.log(users);
+    const userContainer = document.getElementById("mostActiveUsers");
+    userContainer.innerHTML = ""; // Clear the previous posts
+
+    users.forEach(user => {
+        const postElement = document.createElement("div");
+        postElement.className = "bg-white p-6 rounded flex gap-6";
+
+        postElement.innerHTML = `
+            <div>
+                <div>
+                    <span class="font-bold">@${user.userName}</span>
+                </div>
+                <div>
+                    ${user.activityCount}
+                </div>
+            </div>
+        `;
+
+        userContainer.appendChild(postElement);
+    });
+})
+
 connection.on("NewPostReceived", (posts) => {
-    console.log(posts);
     const postContainer = document.getElementById("postsContainer");
     postContainer.innerHTML = ""; // Clear the previous posts
 
@@ -66,6 +95,41 @@ connection.on("NewPostReceived", (posts) => {
                 </div>
                 <div>
                     ${post.content}
+                </div>
+                <div>
+                    <span class="pr-3"><i class="fa-solid fa-heart" style="color: red;"></i> ${post.likeCount}</span>
+                    <span class="pr-3"><i class="fa-solid fa-comment" style="color: #4f90ff"></i> ${post.commentCount}</span>
+                </div>
+            </div>
+        `;
+
+        postContainer.appendChild(postElement);
+    });
+
+    // Update timestamps every second
+    setInterval(updateTimestamps, 1000);
+});
+
+connection.on("MostPopulairPosts", (posts) => {
+    const postContainer = document.getElementById("mostPopulairPosts");
+    postContainer.innerHTML = ""; // Clear the previous posts
+
+    posts.forEach(post => {
+        const postElement = document.createElement("div");
+        postElement.className = "bg-white p-6 rounded flex gap-6";
+
+        postElement.innerHTML = `
+            <div>
+                <div>
+                    <span class="font-bold">@${post.opUsername}</span>
+                    <span class="font-thin timestamp" data-timestamp="${post.createdAt}">  (${formatTimeAgo(new Date(post.createdAt))})</span>
+                </div>
+                <div>
+                    ${post.content}
+                </div>
+                <div>
+                    <span class="pr-3"><i class="fa-solid fa-heart" style="color: red;"></i> ${post.likeCount}</span>
+                    <span class="pr-3"><i class="fa-solid fa-comment" style="color: #4f90ff"></i> ${post.commentCount}</span>
                 </div>
             </div>
         `;

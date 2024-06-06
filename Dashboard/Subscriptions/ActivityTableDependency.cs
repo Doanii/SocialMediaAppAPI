@@ -4,13 +4,13 @@ using TableDependency.SqlClient;
 
 namespace Dashboard.Subscriptions
 {
-    public class PostTableDependency(DashboardHub dashboardHub, IConfiguration configuration) : ISubscribeTable, IDisposable
+    public class ActivityTableDependency(DashboardHub dashboardHub, IConfiguration configuration) : ISubscribeTable, IDisposable
     {
-        SqlTableDependency<Post> _tableDependency;
+        SqlTableDependency<Activity> _tableDependency;
 
         public void SubscribeTableDependency(string connectionString)
         {
-            _tableDependency = new SqlTableDependency<Post>(connectionString, "Posts");
+            _tableDependency = new SqlTableDependency<Activity>(connectionString, "Activities");
             _tableDependency.OnChanged += TableDependency_OnChanged;
             _tableDependency.OnError += TableDependency_OnError;
             _tableDependency.Start();
@@ -21,14 +21,11 @@ namespace Dashboard.Subscriptions
             Console.Write($"{nameof(Post)} SqlTableDependency error: {e.Error.Message}");
         }
 
-        private async void TableDependency_OnChanged(object sender, TableDependency.SqlClient.Base.EventArgs.RecordChangedEventArgs<Post> e)
+        private async void TableDependency_OnChanged(object sender, TableDependency.SqlClient.Base.EventArgs.RecordChangedEventArgs<Activity> e)
         {
             if (e.ChangeType != TableDependency.SqlClient.Base.Enums.ChangeType.None)
             {
-                await dashboardHub.TotalPosts();
-                await dashboardHub.NewPostsToday();
-                await dashboardHub.NewPostReceived();
-                await dashboardHub.MostPopulairPosts();
+                await dashboardHub.MostPopularUsers();
             }
         }
 
