@@ -41,6 +41,8 @@ namespace SocialMediaAppAPI.Controllers
         [HttpPost("{postId}")]
         public async Task<ActionResult<bool>> LikePost(Guid postId)
         {
+            ActivityService activityService = new ActivityService(_context);
+
             var authenticatedUser = GetAuthenticatedUser();
             if (authenticatedUser == null)
             {
@@ -64,6 +66,7 @@ namespace SocialMediaAppAPI.Controllers
                 post.LikeCount++;
                 _context.Likes.Add(newLike);
                 await _context.SaveChangesAsync();
+                Activity activity1 = await activityService.CreateActivity(authenticatedUser, Types.Enum.ActivityEnum.Liked, $"{authenticatedUser.UserName} heeft een post geliket.");
 
                 return true;
             }
@@ -72,8 +75,7 @@ namespace SocialMediaAppAPI.Controllers
             _context.Likes.Remove(like);
             await _context.SaveChangesAsync();
 
-            ActivityService activityService = new ActivityService(_context);
-            Activity activity = await activityService.CreateActivity(authenticatedUser, Types.Enum.ActivityEnum.Liked, $"{authenticatedUser.UserName} heeft een post geliket.");
+            Activity activity = await activityService.CreateActivity(authenticatedUser, Types.Enum.ActivityEnum.Liked, $"{authenticatedUser.UserName} heeft een post ontliket.");
 
             return false;
         }
