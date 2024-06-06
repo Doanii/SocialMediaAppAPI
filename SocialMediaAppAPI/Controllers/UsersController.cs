@@ -167,6 +167,7 @@ namespace SocialMediaAppAPI.Controllers
                 UserName = username,
                 FollowCount = 0,
                 FollowingCount = 0,
+                CreatedAt = DateTime.UtcNow,
                 ApiToken = GenerateString.Generate()
             };
 
