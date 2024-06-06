@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SocialMediaAppAPI.Data;
 using SocialMediaAppAPI.Models;
+using SocialMediaAppAPI.Services;
 using SocialMediaAppAPI.Types.Attributes;
 using SocialMediaAppAPI.Types.Requests;
 
@@ -127,6 +128,9 @@ namespace SocialMediaAppAPI.Controllers
 
             _context.Comments.Add(createdComment);
             await _context.SaveChangesAsync();
+
+            ActivityService activityService = new ActivityService(_context);
+            Activity activity = await activityService.CreateActivity(authenticatedUser, Types.Enum.ActivityEnum.Posted, $"@{authenticatedUser.UserName} heeft een comment geplaatst.");
 
             // Assuming you have an action called "GetComment" that takes commentId as a parameter
             return CreatedAtAction(nameof(GetComments), new { id = createdComment.CommentId }, createdComment);
