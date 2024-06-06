@@ -6,7 +6,8 @@ const activityTypeStyles = {
     0: { color: "#4da6ff", text: `<i class="fa-solid fa-arrow-up-from-bracket"></i> Posten` },
     1: { color: "#ff8585", text: `<i class="fa-solid fa-heart"></i>  Liken` },
     2: { color: "#85daff", text: `<i class="fa-solid fa-comment"></i> Comments` },
-    3: { color: "#ffbe4f", text: `<i class="fa-solid fa-user-plus"></i> Volgen` }
+    3: { color: "#ffbe4f", text: `<i class="fa-solid fa-user-plus"></i> Volgen` },
+    4: { color: "#91ffc5", text: `<i class="fa-solid fa-address-card"></i> Account` }
 };
 
 let connection = new signalR.HubConnectionBuilder()
