@@ -61,11 +61,13 @@ namespace SocialMediaAppAPI.Controllers
 
             return await _context.Comments.Select(comment => new CommentDTO
             {
+                CommentId = comment.CommentId,
                 UserId = comment.UserId,
                 PostId = comment.PostId,
                 Content = comment.Content,
                 CommentedAt = comment.CommentedAt,
                 UserName = _context.Users.Where(u => u.Id == comment.UserId).Select(u => u.UserName).FirstOrDefault(),
+                Name = _context.Users.Where(u => u.Id == comment.UserId).Select(u => u.Name).FirstOrDefault()
             })
             .Where(c => c.PostId == postId)
             .Skip(skip)
