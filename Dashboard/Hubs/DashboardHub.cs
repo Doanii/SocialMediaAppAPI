@@ -1,4 +1,4 @@
-﻿using Dashboard.Data;
+using Dashboard.Data;
 using Dashboard.Data.Requests;
 using Dashboard.Types.Requests;
 using Microsoft.AspNetCore.SignalR;
@@ -121,6 +121,16 @@ namespace Dashboard.Hubs
             await Clients.All.SendAsync("MostPopulairPosts", posts);
         }
 
+
+        public async Task<List<UserJoins>> UserJoinsPerDay()
+        {
+            using var scope = scopeFactory.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<DashboardDbContext>();
+            var list = await dbContext.Users.GroupBy((user) => user.CreatedAt.Date)
+                .Select((g) => new UserJoins(g.Key, g.Count())).ToListAsync();
+            await Clients.All.SendAsync("UserJoinsPerDay", list);
+            return list;
+        }
 
         public async Task<int> TotalPosts()
         {

@@ -8,15 +8,16 @@
     <script src="/nav.js"></script>
     <link href="/css/style.css" />
 </head>
-<body class="h-screen max-h-screen flex flex-col">
+
+<img class="fixed h-screen w-screen object-cover -z-10" src="/img/88149.jpg" alt="background">
+
+<body class="flex flex-col max-h-screen h-screen">
     <header class="py-2 fixed z-10 bg-white w-full">
         <ul class="flex uppercase text-2xl w-full justify-center gap-8">
             @await Html.PartialAsync("NavLink", new NavLink("Dashboard", "/"))
         </ul>
     </header>
-    <main role="main" class="bg-[url('/img/88149.jpg')] w-full h-full p-6 pt-20">
-        @RenderBody()
-    </main>
+    @RenderBody()
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

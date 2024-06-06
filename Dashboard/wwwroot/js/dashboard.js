@@ -25,6 +25,9 @@ const InvokeData = () => {
     connection.invoke("UserCount").catch(function (err) {
         return console.error(err.toString());
     });
+    connection.invoke("UserJoinsPerDay").catch(function (err) {
+        return console.error(err.toString());
+    });
     connection.invoke("NewPostReceived").catch(function (err) {
         return console.error(err.toString());
     });
@@ -65,6 +68,7 @@ connection.on("NewPostsToday", (count) => {
 connection.on("UserCount", (count) => {
     document.getElementById("UserCount").innerHTML = count;
 });
+
 
 connection.on("MostPopularUsers", (users) => {
     console.log(users);
@@ -133,7 +137,7 @@ connection.on("DisplayActivities", (activities) => {
 
         const activityStyling = activityTypeStyles[activity.type];
 
-        const activityTag = `<span style="background-color: ${activityStyling.color}"  class="rounded p-1 font-bold">${activityStyling.text}</span>`
+        const activityTag = `<span style="background-color: ${activityStyling.color}"  class="rounded p-1 px-3 font-bold">${activityStyling.text}</span>`
 
         activityElement.innerHTML = `
             <div>
@@ -149,7 +153,7 @@ connection.on("DisplayActivities", (activities) => {
         postContainer.appendChild(activityElement);
     });
 
-     //Update timestamps every second
+    //Update timestamps every second
     setInterval(updateTimestamps, 1000);
 });
 
@@ -210,3 +214,36 @@ function updateTimestamps() {
         timestampElement.innerText = `  (${formatTimeAgo(timestamp)})`;
     });
 }
+
+let user_joins_chart;
+connection.on("UserJoinsPerDay", (userjoins) => {
+    const ctx = document.getElementById('myChart');
+    const dates = userjoins.map(x => new Date(x.date).toLocaleDateString('en-US', { day: 'numeric', month: 'short' }));
+    const counts = userjoins.map(x => x.count);
+
+    if (user_joins_chart) {
+        user_joins_chart.destroy();
+    }
+
+    user_joins_chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: dates,
+            datasets: [{
+                label: '# of users joined',
+                data: counts,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    ticks: {
+                        stepSize: 1
+                    },
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+});
