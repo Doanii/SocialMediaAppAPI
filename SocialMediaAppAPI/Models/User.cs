@@ -26,6 +26,8 @@ namespace SocialMediaAppAPI.Models
         [Required]
         public string ApiToken { get; set; }
 
+        public bool IsAdmin { get; set; } = false;
+
         public ICollection<Followers>? Followers { get; set; }
         public ICollection<Followers>? Following { get; set; }
         public ICollection<Post>? Posts { get; set; }
