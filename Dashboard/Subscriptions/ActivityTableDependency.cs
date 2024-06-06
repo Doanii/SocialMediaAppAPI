@@ -27,6 +27,7 @@ namespace Dashboard.Subscriptions
             if (e.ChangeType != TableDependency.SqlClient.Base.Enums.ChangeType.None)
             {
                 await dashboardHub.MostPopularUsers();
+                await dashboardHub.DisplayActivities();
             }
         }
 

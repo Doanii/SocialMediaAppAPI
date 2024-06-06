@@ -14,47 +14,52 @@ namespace Dashboard.Hubs
         {
             using var scope = scopeFactory.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<DashboardDbContext>();
-
-            Console.WriteLine($"Fakka van andere kant?, {DateTime.Now}");
-            // Query to find the top 3 users with the most activities
             var topUsers = await dbContext.Activities
-                .GroupBy(a => a.UserId)  // Group by UserId
-                .Select(g => new { UserId = g.Key, Count = g.Count() })  // Select UserId and count of activities
-                .OrderByDescending(g => g.Count)  // Order by count descending
-                .Take(5)  // Take the top 3 results
-                .ToListAsync();  // Convert to a list
+                .GroupBy(a => a.UserId)
+                .Select(g => new { UserId = g.Key, Count = g.Count() })
+                .OrderByDescending(g => g.Count)
+                .Take(5) 
+                .ToListAsync();
 
             if (topUsers.Any())
             {
-                var topUserIds = topUsers.Select(u => u.UserId).ToList();  // Extract UserIds from top users
+                var topUserIds = topUsers.Select(u => u.UserId).ToList(); 
 
-                // Query to get the usernames for the top 3 users
                 var userInfos = await dbContext.Users
-                    .Where(u => topUserIds.Contains(u.Id))  // Filter users by the UserIds found in the top users query
-                    .Select(u => new { u.Id, u.UserName })  // Select the UserId and UserName
-                    .ToListAsync();  // Convert to a list
+                    .Where(u => topUserIds.Contains(u.Id)) 
+                    .Select(u => new { u.Id, u.UserName })  
+                    .ToListAsync(); 
 
-                // Combine the top user information with their usernames
                 var topUsersWithNames = topUsers
-                    .Join(userInfos,  // Join the top users with their corresponding usernames
-                          activity => activity.UserId,  // Join on UserId from top users
-                          user => user.Id,  // Join on Id from users
-                          (activity, user) => new  // Create a new anonymous object with required information
+                    .Join(userInfos,
+                          activity => activity.UserId, 
+                          user => user.Id, 
+                          (activity, user) => new  
                           {
                               UserId = activity.UserId,
                               UserName = user.UserName,
                               ActivityCount = activity.Count
                           })
-                    .ToList();  // Convert to a list
+                    .ToList(); 
 
-                // Send the top 3 users' information to all clients
                 await Clients.All.SendAsync("MostPopularUsers", topUsersWithNames);
             }
             else
             {
-                // Handle the case when no user is found
                 await Clients.All.SendAsync("MostPopularUsers", new List<object>());
             }
+        }
+
+        public async Task DisplayActivities()
+        {
+            using var scope = scopeFactory.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<DashboardDbContext>();
+
+            var activities = await dbContext.Activities
+                                            .OrderByDescending(a => a.CreatedAt)
+                                            .Take(10)
+                                            .ToListAsync();
+            await Clients.All.SendAsync("DisplayActivities", activities);
         }
 
         public async Task NewPostReceived()

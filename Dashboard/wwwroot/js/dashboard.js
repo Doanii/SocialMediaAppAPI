@@ -2,6 +2,13 @@
 
 //const { post } = require("jquery");
 
+const activityTypeStyles = {
+    0: { color: "#4da6ff", text: `<i class="fa-solid fa-arrow-up-from-bracket"></i> Posten` },
+    1: { color: "#ff8585", text: `<i class="fa-solid fa-heart"></i>  Liken` },
+    2: { color: "#85daff", text: `<i class="fa-solid fa-comment"></i> Comments` },
+    3: { color: "#ffbe4f", text: `<i class="fa-solid fa-user-plus"></i> Volgen` }
+};
+
 let connection = new signalR.HubConnectionBuilder()
     .withUrl("/DashboardHub")
     .configureLogging(signalR.LogLevel.Information)
@@ -24,6 +31,9 @@ const InvokeData = () => {
         return console.error(err.toString());
     });
     connection.invoke("MostPopularUsers").catch(function (err) {
+        return console.error(err.toString());
+    });
+    connection.invoke("DisplayActivities").catch(function (err) {
         return console.error(err.toString());
     });
 };
@@ -107,6 +117,38 @@ connection.on("NewPostReceived", (posts) => {
     });
 
     // Update timestamps every second
+    setInterval(updateTimestamps, 1000);
+});
+
+
+connection.on("DisplayActivities", (activities) => {
+    console.log(activities);
+    const postContainer = document.getElementById("activities");
+    postContainer.innerHTML = ""; // Clear the previous activities
+
+    activities.forEach(activity => {
+        const activityElement = document.createElement("div");
+        activityElement.className = "bg-white p-3 rounded flex gap-6";
+
+        const activityStyling = activityTypeStyles[activity.type];
+
+        const activityTag = `<span style="background-color: ${activityStyling.color}"  class="rounded p-1 font-bold">${activityStyling.text}</span>`
+
+        activityElement.innerHTML = `
+            <div>
+                <div>
+                    ${activityTag} <span class="font-thin timestamp" data-timestamp="${activity.createdAt}">  (${formatTimeAgo(new Date(activity.createdAt))})</span>
+                </div>
+                <div>
+                    ${activity.content}
+                </div>
+            </div>
+        `;
+
+        postContainer.appendChild(activityElement);
+    });
+
+     //Update timestamps every second
     setInterval(updateTimestamps, 1000);
 });
 
