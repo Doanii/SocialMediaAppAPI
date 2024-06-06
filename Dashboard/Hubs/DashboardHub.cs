@@ -8,24 +8,27 @@ using System.Runtime.InteropServices;
 
 namespace Dashboard.Hubs
 {
-    public class DashboardHub(DashboardDbContext dbContext) : Hub
+    public class DashboardHub(IServiceScopeFactory scopeFactory) : Hub
     {
         public async Task MostPopularUsers()
         {
+            using var scope = scopeFactory.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<DashboardDbContext>();
+
+            Console.WriteLine($"Fakka van andere kant?, {DateTime.Now}");
             // Query to find the top 3 users with the most activities
             var topUsers = await dbContext.Activities
                 .GroupBy(a => a.UserId)  // Group by UserId
                 .Select(g => new { UserId = g.Key, Count = g.Count() })  // Select UserId and count of activities
                 .OrderByDescending(g => g.Count)  // Order by count descending
-                .Take(3)  // Take the top 3 results
+                .Take(5)  // Take the top 3 results
                 .ToListAsync();  // Convert to a list
 
-            // If there are no activities, handle it appropriately
             if (topUsers.Any())
             {
-                // Query to get the usernames for the top 3 users
                 var topUserIds = topUsers.Select(u => u.UserId).ToList();  // Extract UserIds from top users
 
+                // Query to get the usernames for the top 3 users
                 var userInfos = await dbContext.Users
                     .Where(u => topUserIds.Contains(u.Id))  // Filter users by the UserIds found in the top users query
                     .Select(u => new { u.Id, u.UserName })  // Select the UserId and UserName
@@ -56,6 +59,9 @@ namespace Dashboard.Hubs
 
         public async Task NewPostReceived()
         {
+            using var scope = scopeFactory.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<DashboardDbContext>();
+
             var posts = await dbContext.Posts
                 .Join(dbContext.Users,
                       post => post.UserId,
@@ -79,6 +85,9 @@ namespace Dashboard.Hubs
 
         public async Task MostPopulairPosts()
         {
+            using var scope = scopeFactory.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<DashboardDbContext>();
+
             var posts = await dbContext.Posts
                 .Join(dbContext.Users,
                     post => post.UserId,
@@ -110,6 +119,9 @@ namespace Dashboard.Hubs
 
         public async Task<int> TotalPosts()
         {
+            using var scope = scopeFactory.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<DashboardDbContext>();
+
             int count = await dbContext.Posts.Select(p => new CountDTO { Id = p.Id }).CountAsync();
             await Clients.All.SendAsync("TotalPosts", count);
 
@@ -118,6 +130,9 @@ namespace Dashboard.Hubs
 
         public async Task<int> NewPostsToday()
         {
+            using var scope = scopeFactory.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<DashboardDbContext>();
+
             var today = DateTime.Today;
             int count = await dbContext.Posts
                                        .Where(p => p.CreatedAt >= today && p.CreatedAt < today.AddDays(1))
@@ -128,6 +143,9 @@ namespace Dashboard.Hubs
 
         public async Task<int> UserCount()
         {
+            using var scope = scopeFactory.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<DashboardDbContext>();
+
             int usercount = await dbContext.Users.GroupBy(p => new CountDTO { Id = p.Id }).CountAsync();
             await Clients.All.SendAsync("UserCount", usercount);
             return usercount;

@@ -62,7 +62,7 @@ connection.on("MostPopularUsers", (users) => {
 
     users.forEach(user => {
         const postElement = document.createElement("div");
-        postElement.className = "bg-white p-6 rounded flex gap-6";
+        postElement.className = "bg-white p-3 rounded flex gap-6";
 
         postElement.innerHTML = `
             <div>
@@ -70,7 +70,7 @@ connection.on("MostPopularUsers", (users) => {
                     <span class="font-bold">@${user.userName}</span>
                 </div>
                 <div>
-                    ${user.activityCount}
+                    <span><i class="fa-solid fa-clock-rotate-left pr-2"></i>${user.activityCount} ${user.activityCount > 1 ? "activiteiten" : "activiteit"}</span>
                 </div>
             </div>
         `;
@@ -85,7 +85,7 @@ connection.on("NewPostReceived", (posts) => {
 
     posts.forEach(post => {
         const postElement = document.createElement("div");
-        postElement.className = "bg-white p-6 rounded flex gap-6";
+        postElement.className = "bg-white p-3 rounded flex gap-6";
 
         postElement.innerHTML = `
             <div>

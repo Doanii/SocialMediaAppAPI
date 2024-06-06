@@ -19,7 +19,7 @@ namespace Dashboard
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
             builder.Services.AddDbContext<DashboardDbContext>(options =>
-                options.UseSqlServer(connectionString), ServiceLifetime.Singleton);
+                options.UseSqlServer(connectionString));
 
             builder.Services.AddSingleton<DashboardHub>();
             builder.Services.AddSingleton<PostTableDependency>();

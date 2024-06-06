@@ -23,6 +23,7 @@ namespace Dashboard.Subscriptions
 
         private async void TableDependency_OnChanged(object sender, TableDependency.SqlClient.Base.EventArgs.RecordChangedEventArgs<Activity> e)
         {
+            Console.WriteLine($"Fakkaaaa, {DateTime.Now}");
             if (e.ChangeType != TableDependency.SqlClient.Base.Enums.ChangeType.None)
             {
                 await dashboardHub.MostPopularUsers();
