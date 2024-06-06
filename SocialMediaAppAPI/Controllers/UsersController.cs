@@ -125,7 +125,7 @@ namespace SocialMediaAppAPI.Controllers
             if (!Regex.IsMatch(createUserDto.Email, emailRegex))
             {
                 // If the email is not in a valid format, add to errors
-                errors.Add("Invalid email format");
+                errors.Add("Ongeldige email formaat");
             }
 
             // Username validation: convert to lowercase, remove spaces, and check for allowed characters
@@ -135,7 +135,7 @@ namespace SocialMediaAppAPI.Controllers
             if (username.Contains(" ") || !Regex.IsMatch(username, usernameRegex))
             {
                 // If the username is invalid, add to errors
-                errors.Add("Invalid username. Only lowercase letters, numbers, and the special characters '_', '.', '-' are allowed, and no spaces.");
+                errors.Add("Ongeldige gebruikersnaam. Geen spaties, alleen lage letters, nummers, en de speciale karakters '_', '.', '-' zijn toegestaan.");
             }
 
             // Check if the email already exists in the database
@@ -144,7 +144,7 @@ namespace SocialMediaAppAPI.Controllers
             if (existingUserWithSameEmail != null)
             {
                 // If the email already exists, add to errors
-                errors.Add("Email already exists");
+                errors.Add("Email is al in gebruik");
             }
 
             // Check if the username already exists in the database
@@ -153,7 +153,7 @@ namespace SocialMediaAppAPI.Controllers
             if (existingUserWithSameUsername != null)
             {
                 // If the username already exists, add to errors
-                errors.Add("Username already exists");
+                errors.Add("Gebruikersnaam is al in gebruik");
             }
 
             // If there are any errors, return them
@@ -179,7 +179,7 @@ namespace SocialMediaAppAPI.Controllers
             await _context.SaveChangesAsync();
 
             ActivityService activityService = new ActivityService(_context);
-            Activity activity = await activityService.CreateActivity(user, Types.Enum.ActivityEnum.Liked, $"Nieuw account geregistreerd: @{user.UserName}.");
+            Activity activity = await activityService.CreateActivity(user, Types.Enum.ActivityEnum.Account, $"Nieuw account geregistreerd: @{user.UserName}.");
 
             return CreatedAtAction("Register", new { id = user.Id }, user.ApiToken);
         }
@@ -192,7 +192,7 @@ namespace SocialMediaAppAPI.Controllers
 
             if (user == null || !PasswordHasher.VerifyPassword(loginDto.Password, user.Password))
             {
-                return Unauthorized("Invalid email or password");
+                return Unauthorized("Ongeldige email of wachtwoord");
             }
 
             return Ok(user.ApiToken);
