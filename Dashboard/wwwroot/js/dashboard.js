@@ -47,15 +47,17 @@ connection.on("UserCount", (count) => {
     document.getElementById("UserCount").innerHTML = count;
 });
 
+let user_joins_chart;
 connection.on("UserJoinsPerDay", (userjoins) => {
     const ctx = document.getElementById('myChart');
-    
     const dates = userjoins.map(x => new Date(x.date).toLocaleDateString('en-US', { day: 'numeric', month: 'short' }));
     const counts = userjoins.map(x => x.count);
-    
-    console.log(userjoins)
 
-    new Chart(ctx, {
+    if (user_joins_chart) {
+        user_joins_chart.destroy();
+    }
+
+    user_joins_chart = new Chart(ctx, {
         type: 'line',
         data: {
             labels: dates,
