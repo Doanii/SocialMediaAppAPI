@@ -3,51 +3,55 @@
     //bg-white backdrop-blur-2xl p-6 rounded
 }
 
-<div class="flex gap-6 h-[50%]">
-    <div class="bg-white/50 backdrop-blur-2xl p-6 rounded w-full overflow-clip">
-        <div class="bg-white p-6 rounded h-full flex justify-center">
-            <canvas class="max-h-full" id="myChart"> </canvas>
-        </div>
-    </div>
-    <div class="grid bg-white/50 backdrop-blur-2xl p-6 rounded gap-6">
-        <div class="capitalize text-3xl text-center text-white font-bold flex items-center justify-center">
-            <div>
-                total users:
-                <span class="text-green-200 font-black ml-1" id="UserCount">0</span>
+<main role="main" class="w-full h-full p-6 pt-20 flex gap-6">
+    <div class="flex flex-col gap-6">
+        <div class="flex gap-6 h-[50%]">
+            <div class="bg-white/50 backdrop-blur-2xl p-6 rounded w-full overflow-clip">
+                <div class="bg-white p-6 rounded h-full flex justify-center">
+                    <canvas class="max-h-full" id="myChart"> </canvas>
+                </div>
+            </div>
+            <div class="grid bg-white/50 backdrop-blur-2xl p-6 rounded gap-6">
+                <div class="capitalize text-3xl text-center text-white font-bold flex items-center justify-center">
+                    <div>
+                        total users:
+                        <span class="text-green-200 font-black ml-1" id="UserCount">0</span>
+                    </div>
+                </div>
+                <div class="capitalize text-3xl text-center text-white font-bold flex items-center justify-center">
+                    total posts:
+                    <span class="text-green-200 font-black ml-2" id="TotalPostsCount">0</span>
+                </div>
+                <div class="capitalize text-3xl text-center text-white font-bold flex items-center justify-center">
+                    total posts today:
+                    <span class="text-green-200 font-black ml-2" id="NewPostsToday">0</span>
+                </div>
             </div>
         </div>
-        <div class="capitalize text-3xl text-center text-white font-bold flex items-center justify-center">
-            total posts:
-            <span class="text-green-200 font-black ml-2" id="TotalPostsCount">0</span>  
-        </div>
-        <div class="capitalize text-3xl text-center text-white font-bold flex items-center justify-center">
-            total posts today:
-            <span class="text-green-200 font-black ml-2" id="NewPostsToday">0</span>
-        </div>
-    </div>
-</div>
 
-<div class="flex gap-6 h-[50%]">
-    <div class="grid grid-cols-3 gap-6 h-full">
-        <div class="flex flex-col bg-white/50 backdrop-blur-2xl p-6 rounded overflow-y-scroll">
-            <div class="font-bold text-lg mb-4">Populairste berichten</div>
-            <div id="mostPopulairPosts" class="flex flex-col gap-6">
-            </div>
-        </div>
-        <div class="flex flex-col bg-white/50 backdrop-blur-2xl p-6 rounded overflow-y-scroll">
-            <div class="font-bold text-lg mb-4">Activiteiten logboek</div>
-            <div id="activities" class="flex flex-col gap-6">
-            </div>
-        </div>
-        <div class="flex flex-col bg-white/50 backdrop-blur-2xl p-6 rounded overflow-y-scroll">
-            <div class="font-bold text-lg mb-4">Meest actieve gebruikers</div>
-            <div id="mostActiveUsers" class="flex flex-col gap-6">
+        <div class="flex gap-6 h-[50%]">
+            <div class="grid grid-cols-3 gap-6 h-full">
+                <div class="flex flex-col bg-white/50 backdrop-blur-2xl p-6 rounded overflow-y-scroll">
+                    <div class="font-bold text-lg mb-4">Populairste berichten</div>
+                    <div id="mostPopulairPosts" class="flex flex-col gap-6">
+                    </div>
+                </div>
+                <div class="flex flex-col bg-white/50 backdrop-blur-2xl p-6 rounded overflow-y-scroll">
+                    <div class="font-bold text-lg mb-4">Activiteiten logboek</div>
+                    <div id="activities" class="flex flex-col gap-6">
+                    </div>
+                </div>
+                <div class="flex flex-col bg-white/50 backdrop-blur-2xl p-6 rounded overflow-y-scroll">
+                    <div class="font-bold text-lg mb-4">Meest actieve gebruikers</div>
+                    <div id="mostActiveUsers" class="flex flex-col gap-6">
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     <div class="bg-white/50 backdrop-blur-2xl p-6 rounded flex flex-col gap-6 overflow-y-scroll" id="postsContainer">
     </div>
-</div>
+</main>
 
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
