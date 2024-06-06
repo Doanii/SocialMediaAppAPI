@@ -175,11 +175,11 @@ namespace SocialMediaAppAPI.Controllers
                 ApiToken = GenerateString.Generate()
             };
 
-            ActivityService activityService = new ActivityService(_context);
-            Activity activity = await activityService.CreateActivity(user, Types.Enum.ActivityEnum.Liked, $"Nieuw account geregistreerd: @{user.UserName}.");
-
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
+
+            ActivityService activityService = new ActivityService(_context);
+            Activity activity = await activityService.CreateActivity(user, Types.Enum.ActivityEnum.Liked, $"Nieuw account geregistreerd: @{user.UserName}.");
 
             return CreatedAtAction("Register", new { id = user.Id }, user.ApiToken);
         }
