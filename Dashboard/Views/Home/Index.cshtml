@@ -3,10 +3,10 @@
     //bg-white backdrop-blur-2xl p-6 rounded
 }
 
-<div class="grid lg:grid-cols-2 gap-6">
-    <div class="bg-white/50 backdrop-blur-2xl p-6 rounded">
-        <div class="bg-white p-6 rounded">
-            <canvas id="myChart"> </canvas>
+<div class="flex gap-6 h-[50%]">
+    <div class="bg-white/50 backdrop-blur-2xl p-6 rounded w-full overflow-clip">
+        <div class="bg-white p-6 rounded h-full flex justify-center">
+            <canvas class="max-h-full" id="myChart"> </canvas>
         </div>
     </div>
     <div class="grid bg-white/50 backdrop-blur-2xl p-6 rounded gap-6">
@@ -25,24 +25,27 @@
             <span class="text-green-200 font-black ml-2" id="NewPostsToday">0</span>
         </div>
     </div>
-    <div class="flex flex-col gap-6">
-        <div class="flex flex-col bg-white/50 backdrop-blur-2xl p-6 rounded">
+</div>
+
+<div class="flex gap-6 h-[50%]">
+    <div class="grid grid-cols-3 gap-6 h-full">
+        <div class="flex flex-col bg-white/50 backdrop-blur-2xl p-6 rounded overflow-y-scroll">
             <div class="font-bold text-lg mb-4">Populairste berichten</div>
             <div id="mostPopulairPosts" class="flex flex-col gap-6">
             </div>
         </div>
-        <div class="flex flex-col bg-white/50 backdrop-blur-2xl p-6 rounded">
+        <div class="flex flex-col bg-white/50 backdrop-blur-2xl p-6 rounded overflow-y-scroll">
             <div class="font-bold text-lg mb-4">Activiteiten logboek</div>
             <div id="activities" class="flex flex-col gap-6">
             </div>
         </div>
-        <div class="flex flex-col bg-white/50 backdrop-blur-2xl p-6 rounded">
+        <div class="flex flex-col bg-white/50 backdrop-blur-2xl p-6 rounded overflow-y-scroll">
             <div class="font-bold text-lg mb-4">Meest actieve gebruikers</div>
             <div id="mostActiveUsers" class="flex flex-col gap-6">
             </div>
         </div>
     </div>
-    <div class="bg-white/50 backdrop-blur-2xl p-6 rounded flex flex-col gap-6" id="postsContainer">
+    <div class="bg-white/50 backdrop-blur-2xl p-6 rounded flex flex-col gap-6 overflow-y-scroll" id="postsContainer">
     </div>
 </div>
 
