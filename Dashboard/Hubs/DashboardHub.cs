@@ -124,6 +124,8 @@ namespace Dashboard.Hubs
 
         public async Task<List<UserJoins>> UserJoinsPerDay()
         {
+            using var scope = scopeFactory.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<DashboardDbContext>();
             var list = await dbContext.Users.GroupBy((user) => user.CreatedAt.Date)
                 .Select((g) => new UserJoins(g.Key, g.Count())).ToListAsync();
             await Clients.All.SendAsync("UserJoinsPerDay", list);
