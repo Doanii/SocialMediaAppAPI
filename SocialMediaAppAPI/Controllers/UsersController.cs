@@ -43,6 +43,7 @@ namespace SocialMediaAppAPI.Controllers
                 {
                     Id = user.Id,
                     Name = user.Name,
+                    CreatedAt = user.CreatedAt,
                     Email = user.Email,
                     UserName = user.UserName,
                     FollowCount = user.FollowCount,
@@ -74,6 +75,7 @@ namespace SocialMediaAppAPI.Controllers
             {
                 Id = user.Id,
                 Name = user.Name,
+                CreatedAt = user.CreatedAt,
                 Email = user.Email,
                 UserName = user.UserName,
                 FollowCount = user.FollowCount,
@@ -100,6 +102,7 @@ namespace SocialMediaAppAPI.Controllers
                 {
                     Id = user.Id,
                     Name = user.Name,
+                    CreatedAt = user.CreatedAt,
                     Email = user.Email,
                     UserName = user.UserName,
                     FollowCount = user.FollowCount,
